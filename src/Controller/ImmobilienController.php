@@ -3,16 +3,31 @@
 namespace App\Controller;
 
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use function Symfony\Component\String\u;
 
-class ImmobilienController
+class ImmobilienController extends AbstractController
 {
     #[Route('/')]
     public function homepage()
     {
-        return new Response('Exclusive Immobilien');
+        $Immobilien =
+            [
+                ['art' => 'Eigentumswohnung', 'ort' => 'Warnemünde'],
+                ['art' => 'Eigentumswohnung', 'ort' => 'Börgerende'],
+                ['art' => 'Haus zur Miete', 'ort' => 'Nienhagen'],
+                ['art' => 'Haus zur Miete', 'ort' => 'Kühlungsborn'],
+                ['art' => 'Haus zum Kauf', 'ort' => 'Kühlungsborn'],
+                ['art' => 'Haus zum Kauf', 'ort' => 'Warnemünde'],
+            ];
+        return $this->render('immobilien/homepage.html.twig',
+        [
+            'title' => 'Exclusive Immobilien',
+            'immobilien' => $Immobilien,
+        ]);
+
     }
 
     #[Route('/show/{slug}')]

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zum Wohlfühlen | {{ parent() }}{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+
+<div>
+    Exclusive Immobilien zum wohlfühlen!
+    Immoblien:
+
+    <ul>
+        {% for immobilien in immobilien %}
+            <li>
+                {{ immobilien.art }} - {{ immobilien.ort }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
