@@ -1,20 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Zum Wohlfühlen | {{ parent() }}{% endblock %}
+{% block title %}Home | {{ parent() }}{% endblock %}
 
 {% block body %}
-<h1>{{ title }}</h1>
+    <div class="container">
+        <h1 class="d-inline me-3">Exclusive Immobilien zum Wohlfühlen</h1> <i class="fas fa-edit"></i>
+        <div class="row mt-5">
+            <div class="col-12 col-md-4">
 
-<div>
-    Exclusive Immobilien zum wohlfühlen!
-    Immoblien:
+            </div>
+            <div class="col-12 col-md-8 ps-5">
+                <h2 class="mb-4">Ein paar Exclusive Immobilien:</h2>
+                {% for property in immobilien %}
+                <div class="property-list">
+                    <div class="d-flex mb-3">
+                        <span class="property-details">{{ property.locationtown }} - {{ property.locationstreet }} {{ property.locationstreetnumber }}</span>
+                        <a href="https://docs.fontawesome.com/web/di=-deeper/accessibility">
+                            <i class="fas fa-bars mx-3"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
 
-    <ul>
-        {% for immobilien in immobilien %}
-            <li>
-                {{ immobilien.art }} - {{ immobilien.ort }}
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+                <button type="button" class="btn btn-success"> Alle Immobilien</button>
+            </div>
+        </div>
+    </div>
 {% endblock %}

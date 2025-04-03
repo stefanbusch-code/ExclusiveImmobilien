@@ -17,9 +17,7 @@ final class LocationController extends AbstractController
         $location->setLocationZipcode('18109');
         $location->setLocationTown('Warnemünde');
         $location->setLocationStreet('Am Strom');
-        $location->setLocationStreetnumber('1');
-
-        dd($location);
+        $location->setLocationStreetnumber('3');
 
         $entityManager->persist($location);
         $entityManager->flush();

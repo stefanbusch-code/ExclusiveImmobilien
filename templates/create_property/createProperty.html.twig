@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <br>
+    <div class="container">
+        <div>
+            {{ form_start(createForm) }}
+
+            <div class="col-sm-8-sm-offset-2">
+                {# Formular für property-Felder #}
+                {{ form_row(createForm.property_title) }}
+                {{ form_row(createForm.property_discription) }}
+                {{ form_row(createForm.preis) }}
+                {{ form_row(createForm.bild) }}
+                {# Formular für location-Felder(durch eingebettete Location/Type hinzugefügt#}
+                {{ form_row(createForm.location.location_zipcode) }}
+                {{ form_row(createForm.location.location_town) }}
+                {{ form_row(createForm.location.location_street) }}
+                {{ form_row(createForm.location.location_streetnumber) }}
+                {{ form_row(createForm.location.region) }}
+                {{ form_row(createForm.location.country) }}
+            </div>
+            {{ form_end(createForm) }}
+        </div>
+    </div>
+{% endblock %}
