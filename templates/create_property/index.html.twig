@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for message in app.flashes('erfolg') %}
+        <div class="alert alert-success">
+            <h3>{{ message }}</h3>
+        </div>
+    {% endfor %}
+
+    <br>
+    <div class="container">
+    <h2> Immobilien bearbeiten</h2>
+    <br>
+    <table> // class="table .table-striped"
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Titel</td>
+                <td>Beschreibung</td>
+                <td>Preis</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for property in properties %}
+            <tr>
+                <td>{{ property.id }}</td>
+                <td><a href="{{ path('app_create_property.show',{id: property.id}) }}">{{property.propertyTitle}}</a> </td>
+                <td>{{ property.propertyDiscription }}</td>
+                <td>{{ property.preis }}</td>
+                <td><a href="{{ path('app_create_property.delete',{id: property.id}) }}">löschen</a> </td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+        <br>
+        <button type="button" class="btn btn-success"><a href="{{ path('app_create_property.create') }}">Alle Immobilien</a></button>
+    </div>
+{% endblock %}
