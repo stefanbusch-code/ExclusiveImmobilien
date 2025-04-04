@@ -3,7 +3,44 @@
 {% block body %}
     <br>
     <div class="container">
-        <h1>{{ property.propertyTitle}}</h1>
+        <h1>{{property.propertyTitle}}</h1>
         <img src="{{ asset('bilder/' ~ property.bild) }}">
+        <br>
+        <div>
+            <br>
+            <table>  class="table"
+
+                <tbody>
+                <tr>
+                    <th scope="row">Beschreibung</th>
+                    <td>{{property.propertyDiscription}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Preis</th>
+                    <td>{{property.preis}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Postleitzahl</th>
+                    <td>{{property.location.locationZipcode}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Ort</th>
+                    <td>{{property.location.locationTown}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Straße/Hausnummer</th>
+                    <td>{{property.location.locationStreet}} {{property.location.locationStreetnumber}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Bundesland</th>
+                    <td>{{ property.location.region }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Land</th>
+                    <td>{{ property.location.country }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

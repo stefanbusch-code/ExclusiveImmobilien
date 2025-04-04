@@ -11,7 +11,7 @@ use function Symfony\Component\String\u;
 
 class PropertyController extends AbstractController
 {
-    #[Route('/')]
+    #[Route('/', name: 'app_property_homepage')]
     public function homepage(LocationRepository $locationRepository): Response
     {
         $immobilien =

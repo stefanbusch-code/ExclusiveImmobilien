@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zum Wohlfühlen | {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    <section class="playlist-section spad">
+        <div class="container-fluid">
+            <div class="section-titel">
+                <h2>Alle Immobilien</h2>
+            </div>
+            <div class="container">
+                <ul class="playlist-filter controls">
+                    <li class="control" data-filter=".Häuser">Häuser</li>
+                    <li class="control" data-filter=".Appartments">Appartments</li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row playlist-area">
+            {% for property in properties %}
+                <div class="mix col-lg-3 col-md-4 col-sm-6 {{ property.location.locationTown }}">
+                    <div class="playlist-item">
+                        <img src="{{ asset('bilder/' ~ property.bild) }}">
+                        <h5>{{ property.propertyTitle }}</h5>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+
+
+    </section>
+
+{% endblock %}

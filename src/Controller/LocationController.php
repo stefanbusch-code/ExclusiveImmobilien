@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class LocationController extends AbstractController
 {
-    #[Route('/location', name: 'create_location')]
+    #[Route('/location', name: 'app_location_create')]
     public function createLocation(EntityManagerInterface $entityManager): Response
     {
         $location = new Location();
