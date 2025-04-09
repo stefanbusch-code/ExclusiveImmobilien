@@ -1,34 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Zum Wohlfühlen | {{ parent() }}{% endblock %}
-
 {% block body %}
+    <div class="container">
+        <h1>{{ location ? location : 'Alle Immobilien' }}</h1>
 
-    <section class="playlist-section spad">
-        <div class="container-fluid">
-            <div class="section-titel">
-                <h2>Alle Immobilien</h2>
-            </div>
-            <div class="container">
-                <ul class="playlist-filter controls">
-                    <li class="control" data-filter=".Häuser">Häuser</li>
-                    <li class="control" data-filter=".Appartments">Appartments</li>
-                </ul>
-            </div>
-            <div class="clearfix"></div>
-            <div class="row playlist-area">
+        <h2 class="mt-5 mb-4">Filter</h2>
+        <ul class="genre-list ps-0 mt-2 mb-3">
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Apartments zum kaufen'
+                }) }}">Apartments zum Kaufen</a>
+            </li>
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Apartments zum mieten'
+                }) }}">Apartments zum Mieten</a>
+            </li>
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Häuser zum kaufen'
+                }) }}">Häuser zum Kaufen</a>
+            </li>
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Häuser zum mieten'
+                }) }}">Häuser zum Mieten</a>
+            </li>
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Alle Immobilien'
+                }) }}">Alle Immobilien</a>
+            </li>
+
+        </ul>
+
+        <div>
+            <h2 class="mt-5">Immobilienbestand</h2>
             {% for property in properties %}
-                <div class="mix col-lg-3 col-md-4 col-sm-6 {{ property.location.locationTown }}">
-                    <div class="playlist-item">
-                        <img src="{{ asset('bilder/' ~ property.bild) }}">
-                        <h5>{{ property.propertyTitle }}</h5>
-                    </div>
+            <div class="row">
+                <div class="col">
+                    <img src="{{ asset('bilder/' ~ property.bild) }}">
                 </div>
-            {% endfor %}
+                <div class="col">
+                    <p class="mt-2"><strong>{{ property.propertyTitle }}</strong></p>
+                    <span>{{ property.propertyDiscription }}</span> | <span>{{ property.preis }} €</span>
+                    <p><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></p>
+                </div>
+                <div class="w-100"></div>
             </div>
+            <br>
+            {% endfor %}
         </div>
-
-
-    </section>
-
+    </div>
 {% endblock %}

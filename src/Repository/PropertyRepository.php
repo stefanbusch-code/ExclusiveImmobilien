@@ -16,6 +16,28 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
 
+    public function findRandomProperties(int $limit=3):array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT id FROM property ORDER BY RAND() LIMIT :limit';
+
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('limit', $limit, \PDO::PARAM_INT);
+        $result = $stmt->executeQuery();
+        $ids = $result->fetchFirstColumn();
+
+        if(empty($ids)) {
+            return [];
+        }
+        return $this->createQueryBuilder('p')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+    }
+
     //    /**
     //     * @return Property[] Returns an array of Property objects
     //     */

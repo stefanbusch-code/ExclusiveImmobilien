@@ -12,7 +12,7 @@
     <div class="container">
     <h2> Immobilien bearbeiten</h2>
     <br>
-    <table> // class="table .table-striped"
+    <table class="table .table-striped text-white">
         <thead>
             <tr>
                 <td>ID</td>
@@ -28,7 +28,7 @@
                 <td>{{ property.id }}</td>
                 <td><a href="{{ path('app_create_property.show',{id: property.id}) }}">{{property.propertyTitle}}</a> </td>
                 <td>{{ property.propertyDiscription }}</td>
-                <td>{{ property.preis }}</td>
+                <td>{{ property.preis }} €</td>
                 <td><a href="{{ path('app_create_property.delete',{id: property.id}) }}">löschen</a> </td>
                 <td></td>
             </tr>
@@ -37,6 +37,6 @@
 
     </table>
         <br>
-        <button type="button" class="btn btn-success"><a href="{{ path('app_create_property.create') }}">Alle Immobilien</a></button>
+        <a href="{{ path('app_create_property.create') }}"  class="btn btn-success text-white">Neue Immobilie anlegen</a>
     </div>
 {% endblock %}

@@ -7,22 +7,27 @@
         <h2 class="mt-5 mb-4">Filter</h2>
         <ul class="genre-list ps-0 mt-2 mb-3">
             <li class="d-inline">
-                <a class="btn btn-primary btn-sm" href="{{ path('app_house_buy', {
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
                     slug: 'Apartments zum kaufen'
                 }) }}">Apartments zum Kaufen</a>
             </li>
             <li class="d-inline">
-                <a class="btn btn-primary btn-sm" href="{{ path('app_house_buy', {
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
                     slug: 'Apartments zum mieten'
                 }) }}">Apartments zum Mieten</a>
             </li>
             <li class="d-inline">
-                <a class="btn btn-primary btn-sm" href="{{ path('app_house_buy', {
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
                     slug: 'Häuser zum kaufen'
                 }) }}">Häuser zum Kaufen</a>
             </li>
             <li class="d-inline">
-                <a class="btn btn-primary btn-sm" href="{{ path('app_house_buy', {
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                    slug: 'Häuser zum mieten'
+                }) }}">Häuser zum Mieten</a>
+            </li>
+            <li class="d-inline">
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
                     slug: 'Häuser zum mieten'
                 }) }}">Häuser zum Mieten</a>
             </li>
@@ -30,7 +35,8 @@
         </ul>
 
         <div>
-            <h2 class="mt-5">Mixes</h2>
+            <h2 class="mt-5">Immobilienbestand</h2>
+
             <div class="row">
                 <div class="col col-md-4">
                     <div class="mixed-vinyl-container p-3 text-center">
@@ -54,6 +60,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 {% endblock %}
