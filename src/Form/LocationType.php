@@ -15,6 +15,7 @@ class LocationType extends AbstractType
     {
         $builder
             ->add('location_zipcode', TextType::class, [
+                'label'=>'PLZ',
                 'attr' => [
                     'placeholder' => 'Postleitzahl eingeben...',
                 ],
@@ -22,6 +23,7 @@ class LocationType extends AbstractType
             ])
 
             ->add('location_town', TextType::class, [
+                'label'=>'Stadt',
                 'attr' => [
                     'placeholder' => 'Stadt eingeben...',
                 ],
@@ -32,21 +34,25 @@ class LocationType extends AbstractType
                 ]
             ])
             ->add('location_street', TextType::class, [
+                'label'=>'Straße',
                 'attr' => [
                     'placeholder' => 'Straße eingeben...',
                 ],
             ])
             ->add('location_streetnumber', TextType::class, [
+                'label'=>'Hausnummer',
                 'attr' => [
                     'placeholder' => 'Hausnummer eingeben...',
                 ],
             ])
             ->add('region', TextType::class, [
+                'label'=>'Region',
                 'attr' => [
                     'placeholder' => 'Bundesland eingeben...',
                 ],
             ])
             ->add('country', TextType::class, [
+                'label'=>'Land',
                 'attr' => [
                     'placeholder' => 'Land eingeben...',
                 ],

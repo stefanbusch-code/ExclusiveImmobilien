@@ -33,6 +33,10 @@ class Property
     #[ORM\JoinColumn(name: "location_id", referencedColumnName: "id", nullable: false)]
     private ?Location $location = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'properties', cascade: ['persist'])]
+    #[Orm\JoinColumn(name: "category_id", referencedColumnName: "id", nullable: false)]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +97,17 @@ class Property
     public function setLocation(?Location $location): static
     {
         $this->location = $location;
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
         return $this;
     }
 
