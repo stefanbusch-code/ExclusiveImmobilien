@@ -47,8 +47,13 @@ class PropertyType extends AbstractType
                 'label' => 'Kategorie',
                 'placeholder' => 'Kategorie auswählen...'
             ])
-            ->add('speichern', SubmitType::class)
-        ;
+            ->add('speichern', SubmitType::class,[
+                'label' => 'Speichern',
+                'attr' => [
+                    'class' => 'btn btn-success'
+                ]
+            ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

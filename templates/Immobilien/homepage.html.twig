@@ -20,9 +20,9 @@
                             <span class="property-details">{{ property.propertyTitle }}</span>
                         </div>
                         <div class="p-2">{{ property.propertyDiscription }}</div>
-                        <button type="button" class="btn btn-success"><a href="{{ path('app_create_property.show',{id: property.id}) }}">Details</a></button>
+                        <button type="button" class="btn btn-success"  style="width: 600px;"><a href="{{ path('app_create_property.show',{id: property.id}) }}">Details</a></button>
                     </div>
-
+                    <br>
                 </div>
                 {% endfor %}
                 <br>
