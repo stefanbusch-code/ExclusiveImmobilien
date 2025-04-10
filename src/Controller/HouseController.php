@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,15 +12,24 @@ use function Symfony\Component\String\u;
 class HouseController extends AbstractController
 {
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
-    public function all(?string $slug, PropertyRepository $propertyRepository):Response
+    public function all(?string $slug, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository):Response
     {
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
 
-        $properties = $propertyRepository->findAll();
+
+
+        $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
+
+        $properties = $category
+            ? $propertyRepository->findBy(['category' => $category])
+            : $propertyRepository->findAll();
+
+
 
         return $this->render('house/all.html.twig', [
             'properties' => $properties,
             'location' => $location,
+            'category' => $category,
         ]);
     }
 

@@ -38,20 +38,24 @@ class PropertyRepository extends ServiceEntityRepository
 
     }
 
-    //    /**
-    //     * @return Property[] Returns an array of Property objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+     /**
+     * @return Property[] Returns an array of Property objects
+     */
+    public function findAllOrderedByCategory(string $category = null): array
+    {
+        $queryBuilder =  $this->createQueryBuilder('filter')
+            ->orderBy('filter.category');
+
+        if ($category)
+        {
+            $queryBuilder->andWhere('filter.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?Property
     //    {

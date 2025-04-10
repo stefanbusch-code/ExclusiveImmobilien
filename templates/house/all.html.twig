@@ -8,48 +8,48 @@
         <ul class="genre-list ps-0 mt-2 mb-3">
             <li class="d-inline">
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                    slug: 'Apartments zum kaufen'
+                    slug: 'Apartments zum Kaufen'
                 }) }}">Apartments zum Kaufen</a>
             </li>
             <li class="d-inline">
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                    slug: 'Apartments zum mieten'
+                    slug: 'Apartments zum Mieten'
                 }) }}">Apartments zum Mieten</a>
             </li>
             <li class="d-inline">
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                    slug: 'Häuser zum kaufen'
+                    slug: 'Häuser zum Kaufen'
                 }) }}">Häuser zum Kaufen</a>
             </li>
             <li class="d-inline">
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                    slug: 'Häuser zum mieten'
+                    slug: 'Häuser zum Mieten'
                 }) }}">Häuser zum Mieten</a>
             </li>
             <li class="d-inline">
-                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                    slug: 'Alle Immobilien'
-                }) }}">Alle Immobilien</a>
+                <a class="btn btn-primary btn-sm" href="{{ path('app_house_all') }}">Alle Immobilien</a>
             </li>
-
         </ul>
 
         <div>
             <h2 class="mt-5">Immobilienbestand</h2>
-            {% for property in properties %}
-            <div class="row">
-                <div class="col">
-                    <img src="{{ asset('bilder/' ~ property.bild) }}">
+
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for property in properties %}
+                    <div class="col">
+                        <div class="mixed-vinyl-container p-3 text-center">
+                            <img src="{{ asset('bilder/' ~ property.bild) }}" class="img-fluid">
+                            <p class="mt-2"><strong>{{ property.propertyTitle }}</strong></p>
+                            <span>{{ property.category }}</span> | <span>{{ property.preis }} €</span>
+                            <div>
+                                <br>
+                            <p><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="col">
-                    <p class="mt-2"><strong>{{ property.propertyTitle }}</strong></p>
-                    <span>{{ property.category }}</span> | <span>{{ property.preis }} €</span>
-                    <p><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></p>
-                </div>
-                <div class="w-100"></div>
-            </div>
-            <br>
-            {% endfor %}
+
         </div>
     </div>
 {% endblock %}
