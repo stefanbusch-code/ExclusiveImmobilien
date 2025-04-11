@@ -110,7 +110,4 @@ class Property
         $this->category = $category;
         return $this;
     }
-
-
-
 }

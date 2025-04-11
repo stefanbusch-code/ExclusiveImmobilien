@@ -3,7 +3,7 @@
 {% block body %}
     <div class="container">
         <h1>{{ location ? location : 'Alle Immobilien' }}</h1>
-
+        <div>
         <h2 class="mt-5 mb-4">Filter</h2>
         <ul class="genre-list ps-0 mt-2 mb-3">
             <li class="d-inline">
@@ -30,6 +30,16 @@
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all') }}">Alle Immobilien</a>
             </li>
         </ul>
+            <h2 class="mt-5 mb-4">weitere Filter</h2>
+            <ul class="genre-list ps-0 mt-2 mb-3">
+                <li class="d-inline">
+                    <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
+                        slug: 'Apartments zum Kaufen'
+                    }) }}">Apartments zum Kaufen</a>
+                </li>
+            </ul>
+
+
 
         <div>
             <h2 class="mt-5">Immobilienbestand</h2>

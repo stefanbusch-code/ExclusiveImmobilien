@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\LocationRepository;
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,19 +13,14 @@ use function Symfony\Component\String\u;
 class HouseController extends AbstractController
 {
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
-    public function all(?string $slug, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository):Response
+    public function all(?string $slug, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository):Response
     {
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
-
-
-
         $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
 
         $properties = $category
             ? $propertyRepository->findBy(['category' => $category])
             : $propertyRepository->findAll();
-
-
 
         return $this->render('house/all.html.twig', [
             'properties' => $properties,
@@ -33,40 +29,5 @@ class HouseController extends AbstractController
         ]);
     }
 
-
-    /*
-    #[Route('/house/all/{slug}', name: 'app_house_all')]
-    public function all(string $slug =null): Response
-    {
-        $location = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
-
-        return $this->render('house/all.html.twig', [
-            'location' => $location,
-        ]);
-
-    }
-
-    #[Route('/house/allProperties', name: 'app_house_allProperties')]
-    public function allProperties(string $slug =null): Response
-    {
-        $location = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
-
-        return $this->render('house/all.html.twig', [
-            'location' => $location,
-        ]);
-
-    }
-
-    #[Route('/house/all', name: 'app_property_all')]
-    public function property(PropertyRepository $propertyRepository): Response
-    {
-        $properties = $propertyRepository->findAll();
-
-        return $this->render('house/all.html.twig', [
-            'properties' => $properties,
-        ]);
-
-    }
-    */
 
 }
