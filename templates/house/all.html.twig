@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
+    <div class="container" style="margin-top: 100px;">
         <h1>{{ location ? location : 'Alle Immobilien' }}</h1>
         <div>
         <h2 class="mt-5 mb-4">Filter</h2>
@@ -30,14 +30,53 @@
                 <a class="btn btn-primary btn-sm" href="{{ path('app_house_all') }}">Alle Immobilien</a>
             </li>
         </ul>
-            <h2 class="mt-5 mb-4">weitere Filter</h2>
-            <ul class="genre-list ps-0 mt-2 mb-3">
-                <li class="d-inline">
-                    <a class="btn btn-primary btn-sm" href="{{ path('app_house_all', {
-                        slug: 'Apartments zum Kaufen'
-                    }) }}">Apartments zum Kaufen</a>
-                </li>
-            </ul>
+            <h2 class="mt-4">weitere Filter</h2>
+            <form method="get" action="{{ path('app_house_all', {slug:category ? category.discription : null}) }}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="preis" class="form-label">Preis</label>
+                        <select class="form-select" name="preis" id="preis">
+                            <option value="">Beliebig</option>
+                            {% for label, range in priceRanges %}
+                                <option value="{{ range[0] ~ '-' ~ range[1] }}" {{ selectedPreis == (range[0] ~ '-' ~ range[1]) ? 'selected' : '' }}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="town" class="form-label">Stadt</label>
+                        <select class="form-select" name="town" id="town">
+                            <option value="">Alle Städte</option>
+                            {% for t in towns %}
+                                <option value="{{ t }}" {{ selectedTown == t ? 'selected' : '' }}> {{ t }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="region" class="form-label">Region</label>
+                        <select class="form-select" name="region" id="region">
+                            <option value="">Alle Regionen</option>
+                            {% for r in regions %}
+                                <option value="{{ r }}" {{ selectedRegion == r ? 'selected' : '' }}> {{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="country" class="form-label">Land</label>
+                        <select class="form-select" name="country" id="country">
+                            <option value="">Alle Länder</option>
+                            {% for c in countries %}
+                                <option value="{{ c }}" {{ selectedCountry == c ? 'selected' : '' }}> {{ c }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-success" type="submit">Anwenden</button>
+                    <a class="btn btn alert-secondary" href="{{ path('app_house_all') }}">Zurücksetzen</a>
+                </div>
+            </form>
 
 
 

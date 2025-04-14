@@ -57,13 +57,47 @@ class PropertyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?Property
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByFilters(array $criteria = [], ?string $preis = null):array
+    {
+        $qb = $this->createQueryBuilder('p')
+        ->leftJoin('p.location','l')
+        ->addSelect('l')
+        ->leftJoin('p.category','c')
+        ->addSelect('c');
+
+        $locationFields = ['location_town', 'region', 'country'];
+
+        foreach ($criteria as $field => $value) {
+            if (in_array($field, $locationFields)) {
+                $qb->andWhere("l.$field = :$field")->setParameter($field, $value);
+            } else {
+
+                if ($field == 'preis' && is_array($value)) {
+                    $minPreis = $value['min'];
+                    $maxPreis = $value['max'];
+
+                    if ($minPreis) {
+                        $qb->andWhere('p.preis >= :minPreis')->setParameter('minPreis', (int)$minPreis);
+                    }
+                    if ($maxPreis) {
+                        $qb->andWhere('p.preis <= :maxPreis')->setParameter('maxPreis', (int)$maxPreis);
+                    }
+                } else {
+                    $qb->andWhere("p.$field = :$field")->setParameter($field, $value);
+                }
+            }
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findDistinctPreise():array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('Distinct p.preis')
+            ->where('p.preis IS NOT NULL')
+            ->orderBy('p.preis','ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 }

@@ -16,28 +16,30 @@ class LocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Location::class);
     }
 
-    //    /**
-    //     * @return Location[] Returns an array of Location objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findDistinctTowns(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('DISTINCT l.location_town')
+            ->orderBy('l.location_town','ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Location
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findDistinctRegions(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('DISTINCT l.region')
+            ->orderBy('l.region','ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+    public function findDistinctCountries(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('DISTINCT l.country')
+            ->orderBy('l.country','ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
 }

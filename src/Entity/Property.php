@@ -23,7 +23,7 @@ class Property
     private ?string $property_discription = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $preis = null;
+    private ?int $preis = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private $bild;
@@ -66,12 +66,12 @@ class Property
         return $this;
     }
 
-    public function getPreis(): ?float
+    public function getPreis(): ?int
     {
         return $this->preis;
     }
 
-    public function setPreis(?float $Preis): static
+    public function setPreis(?int $Preis): static
     {
         $this->preis = $Preis;
 
