@@ -34,3 +34,18 @@ body
 {
     width: 100px;
 }
+
+.table-dark-custom{
+    background-color: #17242c !important;
+    color: #fff;
+}
+.table-dark-custom th,
+.table-dark-custom td{
+    border-color: #3b3f45;
+}
+.table-dark-custom tbody tr:nth-child(odd){
+    background-color: #2a2d31;
+}
+.table-dark-custom tbody tr:nth-child(even){
+    background-color: #1c1f23;
+}
