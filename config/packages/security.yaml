@@ -4,14 +4,58 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Employee
+                property: employeename
+
+        customer_provider:
+            entity:
+                class: App\Entity\Customer
+                property: customername
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/(?!customer)
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            custom_authenticator: App\Security\EmployeeAuthenticator
+            logout:
+                path: app_employeelogout
+                target: app_property_homepage
+                # where to redirect after logout
+                # target: app_any_route
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                #always_remember_me: true
+
+        customer:
+            pattern: ^/customer
+            lazy: true
+            provider: customer_provider
+            custom_authenticator: App\Security\CustomerAuthenticator
+            logout:
+                path: app_customer_logout
+                target: app_property_homepage
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                #always_remember_me: true
+
+                # where to redirect after logout
+                # target: app_any_route
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -22,8 +66,16 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+     - { path: ^/employeelogin, roles: PUBLIC_ACCESS }
+     - { path: ^/customer/login, roles: PUBLIC_ACCESS }
+
+     - { path: ^/createproperty/create, roles: ROLE_EMPLOYEE }
+     - { path: ^/createproperty, roles: ROLE_EMPLOYEE }
+     - { path: ^/registration/employee, roles: ROLE_EMPLOYEE }
+
+
+
+
 
 when@test:
     security:
