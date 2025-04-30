@@ -106,8 +106,9 @@
                                         Kundenbereich
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark">
-                                        <li><a class="dropdown-item" href="#">Meine Daten</a></li>
-                                        <li><a class="dropdown-item" href="#">Meine Merkliste</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_customer_data') }}">Meine Daten</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_customer_data_edit') }}">Meine Daten ändern</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_wishlist') }}">Meine Merkliste</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>

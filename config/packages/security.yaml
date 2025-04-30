@@ -66,12 +66,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-     - { path: ^/employeelogin, roles: PUBLIC_ACCESS }
-     - { path: ^/customer/login, roles: PUBLIC_ACCESS }
+        - { path: ^/employeelogin, roles: PUBLIC_ACCESS }
+        - { path: ^/customer/login, roles: PUBLIC_ACCESS }
 
-     - { path: ^/createproperty/create, roles: ROLE_EMPLOYEE }
-     - { path: ^/createproperty, roles: ROLE_EMPLOYEE }
-     - { path: ^/registration/employee, roles: ROLE_EMPLOYEE }
+        - { path: ^/createproperty/create, roles: ROLE_EMPLOYEE }
+        - { path: ^/createproperty, roles: ROLE_EMPLOYEE }
+        - { path: ^/registration/employee, roles: ROLE_EMPLOYEE }
 
 
 

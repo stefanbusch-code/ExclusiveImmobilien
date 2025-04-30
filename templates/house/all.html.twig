@@ -102,7 +102,7 @@
                             <span>{{ property.category }}</span> | <span>{{ property.preis }} €</span>
                             <div>
                                 <br>
-                            <p><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></p>
+                            <span><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></span>                             <span><a href="{{ path('app_wishlist_add', {id: property.id}) }}" class="btn btn-outline-primary">merken</a></span>
                             </div>
                         </div>
                     </div>
