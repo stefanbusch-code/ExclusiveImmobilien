@@ -35,10 +35,53 @@ final class CustomerDataController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $newPassword = $form->get('password')->getData();
 
-            if ($newPassword) {
+            if (!empty($newPassword)) {
                 $password = $passwordHasher->hashPassword($customer, $newPassword);
                 $customer->setPassword($password);
             }
+
+            $newEmail = $form->get('email')->getData();
+            if (!empty($newEmail)) {
+                $customer->setEmail($newEmail);
+            }
+            $newPhone = $form->get('phone')->getData();
+            if (!empty($newPhone)) {
+                $customer->setPhone($newPhone);
+            }
+
+            $firstname = $form->get('firstname')->getData();
+            if (!empty($firstname)) {
+                $customer->setFirstname($firstname);
+            }
+            $lastname = $form->get('lastname')->getData();
+            if (!empty($lastname)) {
+                $customer->setLastname($lastname);
+            }
+            $street = $form->get('street')->getData();
+            if (!empty($street)) {
+                $customer->setStreet($street);
+            }
+            $streetnumber = $form->get('streetnumber')->getData();
+            if (!empty($streetnumber)) {
+                $customer->setStreetnumber($streetnumber);
+            }
+            $zipcode = $form->get('zipcode')->getData();
+            if (!empty($zipcode)) {
+                $customer->setZipcode($zipcode);
+            }
+            $city = $form->get('city')->getData();
+            if (!empty($city)) {
+                $customer->setCity($city);
+            }
+            $state = $form->get('state')->getData();
+            if (!empty($state)) {
+                $customer->setState($state);
+            }
+            $country = $form->get('country')->getData();
+            if (!empty($country)) {
+                $customer->setCountry($country);
+            }
+
             $entityManager->persist($customer);
             $entityManager->flush();
 

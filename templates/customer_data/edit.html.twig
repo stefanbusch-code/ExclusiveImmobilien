@@ -2,16 +2,18 @@
 
 {% block body %}
     <div class="container" style="margin-top: 100px;">
-        <h1>Meine Daten</h1>
+        <h1>Meine Daten ändern:</h1>
 
         {{ form_start(form) }}
             {{ form_row(form.email) }}
+            {{ form_row(form.phone) }}
             {{ form_row(form.password) }}
             {{ form_row(form.firstname) }}
             {{ form_row(form.lastname) }}
             {{ form_row(form.street) }}
             {{ form_row(form.streetnumber) }}
             {{ form_row(form.zipcode) }}
+            {{ form_row(form.city) }}
             {{ form_row(form.state) }}
             {{ form_row(form.country) }}
             <button class="btn btn-primary">Speichern</button>

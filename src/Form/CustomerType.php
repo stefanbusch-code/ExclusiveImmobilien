@@ -16,54 +16,78 @@ class CustomerType extends AbstractType
         $builder
             ->add('email', TextType::class, [
                 'label' => 'Email',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Email eingeben...',
                 ]
             ])
+            ->add('phone', TextType::class, [
+                'label' => 'Telefon',
+                'required'=> false,
+                'attr' => [
+                    'placeholder' => 'Telefonnummer eingeben...',
+                ]
+            ])
             ->add('password', PasswordType::class, [
                 'label' => 'Passwort',
+                'required'=> false,
+                'mapped' => false,
                 'attr' => [
                     'placeholder' => 'Passwort eingeben...',
                 ]
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Vorname',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Vorname eingeben...',
                 ]
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Nachname',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Nachname eingeben...',
                 ]
             ])
             ->add('street', TextType::class, [
                 'label' => 'Strasse',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Strasse eingeben...',
                 ]
             ])
             ->add('streetnumber', TextType::class, [
                 'label' => 'Nummer',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Hausnummer eingeben...',
                 ]
             ])
             ->add('zipcode', TextType::class, [
                 'label' => 'Postleitzahl',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Postleitzahl eingeben...',
                 ]
             ])
+            ->add('city', TextType::class, [
+                'label' => 'Ort',
+                'required'=> false,
+                'attr' => [
+                    'placeholder' => 'Ort eingeben...',
+                ]
+            ])
             ->add('state', TextType::class, [
                 'label' => 'Land',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Bundesland eingeben...',
                 ]
             ])
             ->add('country', TextType::class, [
                 'label' => 'Land',
+                'required'=> false,
                 'attr' => [
                     'placeholder' => 'Land eingeben...',
                 ]
