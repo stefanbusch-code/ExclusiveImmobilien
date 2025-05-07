@@ -1,24 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WishlistController!{% endblock %}
-
 {% block body %}
-    <div class="container" style="margin-top: 100px;">
+    <div class="container mt-5" style="margin-top: 100px;">
         <h1 class="mb-4">Meine Merkliste</h1>
             {% if wishlists is not empty %}
-                <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {% for item in wishlists %}
-                    <div class="container text-center">
+
                         <div class="col">
-                            <div class="p-3">
-                                <img src="{{ asset('bilder/' ~ item.property.bild) }}" class="img-fluid">
+                            <div class="card text-bg-dark border-secondary mb-3">
+                                <img src="{{ asset('bilder/' ~ item.property.bild) }}" class="card-img-top" alt="{{ item.property.propertyTitle }}">
                                 <div class="card-body">
-                                    <p>{{ item.property.propertyTitle }}</p>
+                                    <h5 class="card-title">{{ item.property.propertyTitle }}</h5>
                                     <span><a href="{{ path('app_create_property.show',{id: item.property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></span> <span><a href="{{ path('app_wishlist_delete', {id: item.id}) }}" class="btn btn-outline-primary">entfernen</a></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                     {% endfor %}
                 </div>
             {% else %}

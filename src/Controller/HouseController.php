@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\LocationRepository;
 use App\Repository\PropertyRepository;
+use App\Repository\WishlistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use function Symfony\Component\String\u;
 class HouseController extends AbstractController
 {
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
-    public function all(?string $slug, Request $request, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository):Response
+    public function all(?string $slug, Request $request, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, WishlistRepository $wishlistRepository):Response
     {
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
         $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
@@ -62,6 +63,12 @@ class HouseController extends AbstractController
         $countries = $locationRepository->findDistinctCountries();
         $preise = $propertyRepository->findDistinctPreise();
 
+        if ($this->getUser()){
+            $customer = $this->getUser()->getCustomer();
+            $wishlistItems = $wishlistRepository->findBy(['customer' => $customer]);
+            $wishlistPropertyIds = array_map(fn($item)=>$item->getProperty()->getId(), $wishlistItems);
+        }
+
         return $this->render('house/all.html.twig', [
             'properties' => $properties,
             'location' => $location,
@@ -74,7 +81,8 @@ class HouseController extends AbstractController
             'selectedRegion' => $selectedRegion,
             'selectedCountry' => $selectedCountry,
             'selectedPreis' => $selectedPreis,
-            'priceRanges' => $priceRanges
+            'priceRanges' => $priceRanges,
+            'wishlistPropertyIds' => $wishlistPropertyIds,
         ]);
     }
 

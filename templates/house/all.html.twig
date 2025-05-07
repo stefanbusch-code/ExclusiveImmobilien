@@ -90,20 +90,28 @@
 
 
 
-        <div>
-            <h2 class="mt-5">Immobilienbestand</h2>
+            <div class="container mt-5">
+            <h2 class="mb-4">Immobilienbestand</h2>
 
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {% for property in properties %}
                     <div class="col">
-                        <div class="mixed-vinyl-container p-3 text-center">
-                            <img src="{{ asset('bilder/' ~ property.bild) }}" class="img-fluid">
-                            <p class="mt-2"><strong>{{ property.propertyTitle }}</strong></p>
-                            <span>{{ property.category }}</span> | <span>{{ property.preis }} €</span>
-                            <div>
+                        <div class="card text-bg-dark border-secondary mb-3">
+                            <img src="{{ asset('bilder/' ~ property.bild) }}" class="card-img-top" alt="{{ property.propertyTitle }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ property.propertyTitle }}</h5>
+                                <p class="card-text"> {{ property.category }} | {{ property.preis }} €</p>
                                 <br>
-                            <span><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></span>                             <span><a href="{{ path('app_wishlist_add', {id: property.id}) }}" class="btn btn-outline-primary">merken</a></span>
+                                <span><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></span>
+                                <span>
+                                    {% if wishlistPropertyIds is defined and property.id in wishlistPropertyIds %}
+                                        <button class="btn btn-secondary" disabled>gemerkt</button>
+                                    {% else %}
+                                        <a href="{{ path('app_wishlist_add', {id: property.id}) }}" class="btn btn-outline-primary">merken</a>
+                                    {% endif %}
+                                </span>
                             </div>
+
                         </div>
                     </div>
                     {% endfor %}
