@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CustomerDataController extends AbstractController
 {
@@ -17,33 +18,30 @@ final class CustomerDataController extends AbstractController
     #[Route('/customer/data', name: 'app_customer_data')]
     public function showData(): Response
     {
-        /** @var Customer $customer */
-        $customer = $this->getUser();
+        $user = $this->getUser();
+
+        $customer = $user->getCustomer();
+
+        $email =$user->getEmail();
 
         return $this->render('customer_data/index.html.twig', [
             'customer' => $customer,
+            'email' => $email,
         ]);
     }
 
     #[Route('/customer/data/edit', name: 'app_customer_data_edit')]
     public function editProfil(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
-        /** @var \App\Entity\Customer $customer */
-        $customer = $this->getUser();
+        /** @var Customer $customer */
+        $customer = $this->getUser()->getCustomer();
+
         $form = $this->createForm(CustomerType::class, $customer);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $newPassword = $form->get('password')->getData();
 
-            if (!empty($newPassword)) {
-                $password = $passwordHasher->hashPassword($customer, $newPassword);
-                $customer->setPassword($password);
-            }
 
-            $newEmail = $form->get('email')->getData();
-            if (!empty($newEmail)) {
-                $customer->setEmail($newEmail);
-            }
             $newPhone = $form->get('phone')->getData();
             if (!empty($newPhone)) {
                 $customer->setPhone($newPhone);

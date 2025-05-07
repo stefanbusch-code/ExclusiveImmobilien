@@ -17,18 +17,23 @@ final class WishlistController extends AbstractController
     #[Route('/wishlist', name: 'app_wishlist')]
     public function wishlist(WishlistRepository $wishlistRepository): Response
     {
-        $customer = $this->getUser();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $customer = $user->getCustomer();
         $wishlists = $wishlistRepository->findBy(['customer' => $customer]);
 
-        return $this->render('wishlist/index.html.twig',
-            [
-            'wishlist' => $wishlists,
-            ]);
+
+        return $this->render('wishlist/index.html.twig', [
+            'wishlists' => $wishlists,
+        ]);
+
     }
     #[Route('/wishlist/add/{id}', name:'app_wishlist_add')]
     public function addWishlist(Property $property, WishlistRepository $wishlistRepository, EntityManagerInterface $em): Response
     {
-        $customer = $this->getUser();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $customer = $user->getCustomer();
 
         $existing = $wishlistRepository->findOneBy(['customer' => $customer, 'property' => $property]);
         if (!$existing)
@@ -45,7 +50,9 @@ final class WishlistController extends AbstractController
     #[Route('/wishlist/delete/{id}', name:'app_wishlist_delete')]
     public function deleteWishlist(Wishlist $wishlist, EntityManagerInterface $em): Response
     {
-        $customer = $this->getUser();
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $customer = $user->getCustomer();
 
         if($wishlist->getCustomer() === $customer)
         {

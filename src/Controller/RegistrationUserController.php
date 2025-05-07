@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Customer;
+use App\Entity\Employee;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,6 +55,20 @@ final class RegistrationUserController extends AbstractController
             $user->setRoles([$eingabe['roles']]);
 
             $user->setPassword($passwordHasher->hashPassword($user, $eingabe['password']));
+
+            if($eingabe['roles'] === 'ROLE_CUSTOMER') {
+                $customer = new Customer();
+                $customer->setUser($user);
+                $user->setCustomer($customer);
+                $entityManager->persist($customer);
+            }
+            elseif ($eingabe['roles'] === 'ROLE_EMPLOYEE') {
+                $employee = new Employee();
+                $employee->setUser($user);
+                $user->setEmployee($employee);
+                $entityManager->persist($employee);
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('app_property_homepage');
@@ -62,6 +78,7 @@ final class RegistrationUserController extends AbstractController
             'regform' => $regform->createView(),
         ]);
     }
+
 
 
 }

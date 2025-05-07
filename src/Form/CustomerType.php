@@ -14,13 +14,6 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', TextType::class, [
-                'label' => 'Email',
-                'required'=> false,
-                'attr' => [
-                    'placeholder' => 'Email eingeben...',
-                ]
-            ])
             ->add('phone', TextType::class, [
                 'label' => 'Telefon',
                 'required'=> false,
@@ -28,14 +21,7 @@ class CustomerType extends AbstractType
                     'placeholder' => 'Telefonnummer eingeben...',
                 ]
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Passwort',
-                'required'=> false,
-                'mapped' => false,
-                'attr' => [
-                    'placeholder' => 'Passwort eingeben...',
-                ]
-            ])
+
             ->add('firstname', TextType::class, [
                 'label' => 'Vorname',
                 'required'=> false,

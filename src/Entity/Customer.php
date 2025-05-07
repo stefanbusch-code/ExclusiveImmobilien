@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -12,6 +14,54 @@ class Customer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\OneToMany(targetEntity: Wishlist::class, mappedBy: 'customer', cascade: ['persist', 'remove'])]
+    private Collection $wishlist;
+
+    public function __construct(){
+        $this->wishlist = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection<int,wishlist>
+     */
+    public function getWishlist(): Collection
+    {
+        return $this->wishlist;
+    }
+    public function addWishlist(Wishlist $wishlist): static
+    {
+        if(!$this->wishlist->contains($wishlist)) {
+            $this->wishlist->add($wishlist);
+            $wishlist->setCustomer($this);
+        }
+        return $this;
+    }
+    public function removeWishlist(Wishlist $wishlist): static
+    {
+        if($this->wishlist->removeElement($wishlist))
+        {
+            if($wishlist->getCustomer() === $this)
+            {
+                $wishlist->setCustomer(null);
+            }
+        }
+        return $this;
+    }
+
+    #[ORM\OneToOne(inversedBy: 'customer', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;

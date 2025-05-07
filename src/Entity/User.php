@@ -16,6 +16,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Customer $customer = null;
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
+    #[ORM\OneToOne(targetEntity: Employee::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Employee $employee = null;
+
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?Employee $employee): self
+    {
+        $this->employee = $employee;
+        return $this;
+    }
+
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
