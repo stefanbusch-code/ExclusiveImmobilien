@@ -2,29 +2,24 @@
 
 {% block body %}
     <div class="container" style="margin-top: 100px;">
-    <h1>Meine Daten</h1>
+    <h1>Meine Daten:</h1>
         <br>
-        <div class="container text-center">
-            <div class="row">
-                <div class="col">
-                    email
-                </div>
-                <div class="col">
-                    {{ email }}
-                </div>
-            </div>
+        <div class="card text-bg-dark border-secondary mb-3" style="width: 25rem;">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item">{{ email }}</li>
+                <li class="list-group-item">{{ customer.firstname }}</li>
+                <li class="list-group-item">{{ customer.lastname }}</li>
+                <li class="list-group-item">{{ customer.phone }}</li>
+                <li class="list-group-item">{{ customer.street }} {{ customer.streetnumber }}</li>
+                <li class="list-group-item">{{ customer.zipcode }}</li>
+                <li class="list-group-item">{{ customer.city }}</li>
+                <li class="list-group-item">{{ customer.state }}</li>
+                <li class="list-group-item">{{ customer.country }}</li>
+            </ul>
+            <a href="{{ path('app_customer_data_edit') }}" type="button" class="btn btn-primary">Daten ändern</a>
         </div>
-        <br>
-        <div class="container overflow-hidden text-center">
-            <div class="row gx-5">
-                <div class="col">
-                    <div class="p-3">email</div>
-                </div>
-                <div class="col">
-                    <div class="p-3">{{ email }}</div>
-                </div>
-            </div>
-        </div>
+
+        {#
         <div>
             <table>
                 <tbody>
@@ -71,6 +66,7 @@
                 </tbody>
             </table>
         </div>
+        #}
     </div>
 
 

@@ -39,11 +39,7 @@
                     <button type="submit" class="btn btn-outline-danger">Abmelden</button>
                 </form>
             </div>
-
             {% endif %}
-
-
-
 
             {% if not is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_EMPLOYEE')%}
             <div class="d-flex ms-auto me-2">
@@ -85,9 +81,11 @@
                                 <ul class="dropdown-menu dropdown-menu-dark">
                                     <li><a class="dropdown-item" href="{{ path('app_create_property.') }}">Immobilien bearbeiten</a></li>
                                     <li><a class="dropdown-item" href="{{ path('app_create_property.create') }}">Immobilien anlegen</a></li>
-                                    <li><a class="dropdown-item" href="{{ path('app_registration_user') }}">Mitarbeiter registrieren</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_registration_employee') }}">Mitarbeiter registrieren</a></li>
                                       <li>
                                         <hr class="dropdown-divider">
+                                            <li><a class="dropdown-item" href="{{ path('app_employee_data') }}">Meine Daten</a></li>
+                                            <li><a class="dropdown-item" href="{{ path('app_employee_data_edit') }}">Meine Daten ändern</a></li>
                                       </li>
                                 </ul>
                             </li>
@@ -99,16 +97,15 @@
                                         Kundenbereich
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-dark">
-                                        <li><a class="dropdown-item" href="{{ path('app_customer_data') }}">Meine Daten</a></li>
-                                        <li><a class="dropdown-item" href="{{ path('app_customer_data_edit') }}">Meine Daten ändern</a></li>
                                         <li><a class="dropdown-item" href="{{ path('app_wishlist') }}">Meine Merkliste</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
+                                        <li><a class="dropdown-item" href="{{ path('app_customer_data') }}">Meine Daten</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_customer_data_edit') }}">Meine Daten ändern</a></li>
                                         </li>
                                     </ul>
                                 </li>
                             {% endif %}
-
                         </ul>
 
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -119,6 +116,8 @@
                             </div>
 
                         {% endif %}
+
+                    </div>
 
                     </div>
                 </div>

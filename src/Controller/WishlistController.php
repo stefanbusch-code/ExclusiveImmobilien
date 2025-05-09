@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class WishlistController extends AbstractController
 {
-
+    #[isGranted('ROLE_CUSTOMER')]
     #[Route('/wishlist', name: 'app_wishlist')]
     public function wishlist(WishlistRepository $wishlistRepository): Response
     {

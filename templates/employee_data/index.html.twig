@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container" style="margin-top: 100px;">
+    <h1>Meine Daten</h1>
+    <br>
+    <div class="card" style="width: 25rem;">
+        <ul class="list-group list-group-flush ">
+            <li class="list-group-item text-bg-dark">{{ email }}</li>
+            <li class="list-group-item text-bg-dark">{{ employee.firstname }}</li>
+            <li class="list-group-item text-bg-dark">{{ employee.lastname }}</li>
+            <li class="list-group-item text-bg-dark">{{ employee.phone }}</li>
+        </ul>
+        <a href="{{ path('app_employee_data_edit') }}" type="button" class="btn btn-primary">Daten ändern</a>
+    </div>
+    {# <div>
+        <table>
+            <tbody>
+            {% if employee %}
+            <tr>
+                <th scope="row">Email: </th>
+                <td>{{ email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Mein Vorname: </th>
+                <td>{{ employee.firstname }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Mein Nachname: </th>
+                <td>{{ employee.lastname }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Telefon: </th>
+                <td>{{ employee.phone }}</td>
+            </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2">Keine Mitarbeiter Daten verfügbar</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div> #}
+
+</div>
+{% endblock %}
