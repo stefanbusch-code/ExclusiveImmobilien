@@ -42,7 +42,7 @@ final class RegistrationUserController extends AbstractController
         if($regform->isSubmitted() && $regform->isValid()) {
             $eingabe = $regform->getData();
 
-            $user =new User();
+            $user = new User();
             $user->setEmail($eingabe['email']);
             $user->setRoles(['ROLE_CUSTOMER']);
             $user->setPassword($passwordHasher->hashPassword($user, $eingabe['password']));
