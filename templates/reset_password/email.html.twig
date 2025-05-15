@@ -1,0 +1,39 @@
+{% apply inline_css %}
+
+<style>
+
+    body, .email-container{
+        background-color: #3b3f45;
+        padding: 20px;
+        font-family: Arial,sans-serif;
+    }
+
+    .email-content{
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    h1{
+        color: #333333;
+    }
+
+    h3{
+        color: #25a1dd;
+    }
+</style>
+<div class="email-container">
+    <div class="email-content">
+        <h1>Hi!</h1>
+
+        <p>Um dein Passwort zurückzusetzen, klicke bitte auf folgenden Link:</p>
+
+        <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+        <p>Der Link läuft ab in: {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+        <p>Bitte!</p>
+    </div>
+</div>
+
+{% endapply %}

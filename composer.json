@@ -19,6 +19,7 @@
         "symfony/flex": "^2",
         "symfony/form": "6.4.*",
         "symfony/framework-bundle": "6.4.*",
+        "symfony/http-client": "6.4.*",
         "symfony/mailer": "6.4.*",
         "symfony/mime": "^6.4",
         "symfony/monolog-bundle": "^3.0",
@@ -30,6 +31,7 @@
         "symfony/validator": "6.4.*",
         "symfony/webpack-encore-bundle": "1.14.0",
         "symfony/yaml": "6.4.*",
+        "symfonycasts/reset-password-bundle": "^1.23",
         "twig/cssinliner-extra": "^3.21",
         "twig/extra-bundle": "^3.21",
         "twig/twig": "^2.12|^3.0"

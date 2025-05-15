@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Passwort zurücksetzen{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 100px">
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <h1>Password zurücksetzen</h1>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div>
+            <small>
+                Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts zu.
+            </small>
+        </div>
+
+        <button class="btn btn-primary">Jetzt Link zusenden</button>
+    {{ form_end(requestForm) }}
+</div>
+{% endblock %}

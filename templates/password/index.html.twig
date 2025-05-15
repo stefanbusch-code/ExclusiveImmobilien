@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ändere dein Passwort!{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 100px">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <h1>Passwort ändern</h1>
+
+    {{ form_start(form) }}
+        {{ form_row((form.oldPassword)) }}
+        {{ form_row(form.newPassword) }}
+
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}
