@@ -63,6 +63,8 @@ class HouseController extends AbstractController
         $countries = $locationRepository->findDistinctCountries();
         $preise = $propertyRepository->findDistinctPreise();
 
+        $wishlistPropertyIds = [];
+
         if ($this->getUser()){
             $customer = $this->getUser()->getCustomer();
             $wishlistItems = $wishlistRepository->findBy(['customer' => $customer]);

@@ -14,7 +14,7 @@ final class CategoryController extends AbstractController
     public function createCategory(EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
-        $category->setDiscription('Häuser zum Mieten');
+        $category->setDiscription('Apartments zum Mieten');
 
         $entityManager->persist($category);
         $entityManager->flush();
