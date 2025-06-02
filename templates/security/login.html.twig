@@ -4,6 +4,15 @@
 
 {% block body %}
 <div class="container" style="margin-top: 100px;">
+
+        {% for flash in app.flashes('success') %}
+            <div class="alert alert-success">{{ flash }}</div>
+        {% endfor %}
+        {% for flash in app.flashes('error') %}
+            <div class="alert alert-danger">{{ flash }}</div>
+        {% endfor %}
+
+
     <form method="post">
 
         {% if app.user %}
@@ -11,10 +20,16 @@
                 Du bist angemeldet als {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
 
-        {% elseif error %}
-            <div class="alert alert-danger">Diesen Nutzer gibt es nicht</div>
-
         {% endif %}
+
+        {% if error %}
+            {% if error.messageKey == 'Invalid credentials.' %}
+                <div class="alert alert-danger">Diesen Nutzer gibt es nicht</div>
+            {% else %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        {% endif %}
+
 
         <h1 class="h3 mb-3 font-weight-normal">Bitte anmelden</h1>
 
