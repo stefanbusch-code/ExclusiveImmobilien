@@ -7,6 +7,7 @@ scheb_two_factor:
 
     totp:
         enabled: true
-        server_name: Exclusive Immobilien
+        issuer: 'Exclusive Immobilien'
         parameters:
             image: 'https://my-service/img/logo.png'
+        template: 'security/2fa_form.html.twig'

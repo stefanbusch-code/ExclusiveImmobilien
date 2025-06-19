@@ -5,8 +5,9 @@
 {% block body %}
     <div class="container" style="margin-top: 100px;">
         <div class="login-form mt-4 p-4">
-            <h1 class="h3 mb-3 font-weight-normal">Scannen zur Aktivierung der 2-Faktor Authentifizierung!</h1>
-
+            <h1 class="h3 mb-3 font-weight-normal">Aktivierung der 2-Faktor-Authentifizierung!</h1>
+            <div> Um die 2-Faktor-Authentifizierung zu aktivieren, scannen sie bitte diesen QR-Code, mit der Authy oder google Authenticator App.</div>
+            <br>
             <img src="{{ path('app_authenticate_2fa_qr_code') }}" alt="QR-Code" id="qrCodeImage">
 
         </div>
