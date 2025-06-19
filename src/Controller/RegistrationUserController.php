@@ -71,7 +71,7 @@ final class RegistrationUserController extends AbstractController
             $email = (new TemplatedEmail())
                 ->from(new Address('verify_email@exclusiveimmobilien.com', 'Email Verifizierung'))
                 ->to((string) $user->getEmail())
-                ->subject('Bitte bestätige deine E-Mail_adress')
+                ->subject('Bitte bestätige deine E-Mail-Adresse')
                 ->htmlTemplate('verify_email/email.html.twig')
                 ->context([
                     'signedUrl' => $signatureComponents->getSignedUrl(),
@@ -113,7 +113,4 @@ final class RegistrationUserController extends AbstractController
             return $this->redirectToRoute('app_login');
 
     }
-
-
-
 }
