@@ -33,7 +33,7 @@ class PropertyController extends AbstractController
     {
         $properties = $propertyRepository->findRandomProperties(3);
 
-        return $this->render('immobilien/homepage.html.twig', [
+        return $this->render('Immobilien/homepage.html.twig', [
             'properties' => $properties,
         ]);
     }

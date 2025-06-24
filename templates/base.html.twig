@@ -33,10 +33,11 @@
         <a class="navbar-brand" href="{{ path('app_property_homepage') }}">Exclusive Immobilien</a>
 
         <div class="d-flex ms-auto">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {% if app.user %}
             <div class="d-flex ms-auto me-2">
                 <form action="{{ path('app_logout') }}" method="post">
                     <button type="submit" class="btn btn-outline-danger">Abmelden</button>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                 </form>
             </div>
             {% endif %}
@@ -115,10 +116,11 @@
                             </li>
                         </ul>
 
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if app.user %}
                             <div class="d-flex ms-auto me-2">
                                 <form action="{{ path('app_logout') }}" method="post">
                                     <button type="submit" class="btn btn-outline-danger">Abmelden</button>
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                                 </form>
                             </div>
 

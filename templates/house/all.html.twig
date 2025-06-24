@@ -97,9 +97,9 @@
                     {% for property in properties %}
                     <div class="col">
                         <div class="card text-bg-dark border-secondary mb-3">
-                            <img src="{{ asset('bilder/' ~ property.bild) }}" class="card-img-top" alt="{{ property.propertyTitle }}">
+                            <img src="{{ asset('bilder/' ~ property.bild) }}" class="card-img-top" alt="{{ property.property_title }}">
                             <div class="card-body">
-                                <h5 class="card-title">{{ property.propertyTitle }}</h5>
+                                <h5 class="card-title">{{ property.property_title }}</h5>
                                 <p class="card-text"> {{ property.category }} | {{ property.preis }} €</p>
                                 <br>
                                 <span><a href="{{ path('app_create_property.show',{id: property.id}) }}" type="button" class="btn btn-success text-white">mehr Infos</a></span>
