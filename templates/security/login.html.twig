@@ -12,22 +12,22 @@
             <div class="alert alert-danger">{{ flash }}</div>
         {% endfor %}
 
+    {% if error %}
+        {% if error.messageKey == 'Invalid credentials.' %}
+            <div class="alert alert-danger">Diesen Nutzer gibt es nicht</div>
+        {% else %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+    {% endif %}
 
-    <form method="post">
+
+    <form method="post" action="{{ path('app_login')>
 
         {% if app.user %}
             <div class="mb-3">
                 Du bist angemeldet als {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
             </div>
 
-        {% endif %}
-
-        {% if error %}
-            {% if error.messageKey == 'Invalid credentials.' %}
-                <div class="alert alert-danger">Diesen Nutzer gibt es nicht</div>
-            {% else %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
         {% endif %}
 
 
