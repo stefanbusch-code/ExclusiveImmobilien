@@ -15,7 +15,7 @@
         "endroid/qr-code": "4.7",
         "pagerfanta/doctrine-orm-adapter": "^4.7",
         "scheb/2fa-backup-code": "^7.10",
-        "scheb/2fa-bundle": "^7.10",
+        "scheb/2fa-bundle": "*",
         "scheb/2fa-email": "^7.10",
         "scheb/2fa-totp": "^7.10",
         "symfony/asset": "6.4.*",

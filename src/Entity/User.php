@@ -7,15 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface as EmailTwoFactorInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface, EmailTwoFactorInterface
 {
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $totpSecret;
+
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    private ?string $preferred2faProvider = null;
+
+    #[ORM\Column(type: 'string', length: 6, nullable: true)]
+    private ?string $emailAuthCode = null; // 👈 Neue Property für den Code
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -181,6 +188,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         $this->totpSecret = $totpSecret;
 
         return $this;
+    }
+
+    public function getTotpSecret(): ?string
+    {
+        return $this->totpSecret;
+    }
+    public function isEmailAuthEnabled(): bool
+    {
+        return $this->preferred2faProvider === 'email';
+    }
+    public function getPreferred2faProvider(): ?string
+    {
+        return $this->preferred2faProvider;
+    }
+    public function setPreferred2faProvider(?string $provider): void
+    {
+        $this->preferred2faProvider = $provider;
+    }
+
+    public function setEmailAuthEnabled(bool $enable): void
+    {
+        $this->preferred2faProvider = $enable ? 'email' : null;
+    }
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email;
+    }
+
+    public function getEmailAuthCode(): string|null
+    {
+        return $this->emailAuthCode ?? '';
+    }
+
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->emailAuthCode = $authCode;
     }
 
 

@@ -8,7 +8,7 @@
             <div class="login-form mt-4 p-4">
                 <h1 class="h3 mb-3 font-weight-normal">2-Faktor-Authentifizierung!</h1>
                 <p>
-                    Öffne deine App und tippe dem Code ein.
+                    Öffne deine App und tippe den Code ein.
                 </p>
 
                 {#
@@ -63,10 +63,6 @@
                     <a class="btn btn-link" href="{{ logoutPath }}">{{ "cancel"|trans({}, 'SchebTwoFactorBundle') }}</a>
                     <button type="submit" class="btn btn-primary">{{ "login"|trans({}, 'SchebTwoFactorBundle') }}</button>
                 </form>
-
-                {# The logout link gives the user a way out if they can't complete two-factor authentication #}
-
-
 
             </div>
         </div>

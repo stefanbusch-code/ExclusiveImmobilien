@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}2-Faktor-Authentifizierung Einstellungen{% endblock %}
+
+{% block body %}
+    <div class="container" style="margin-top: 100px;">
+        <h1>2 Faktor Authentifizierung</h1>
+
+        <div class="card mt-4 text-bg-dark">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <h3>Authentifizierung wählen</h3>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="2fa_provider"
+                                   id="2fa_none" value="none"
+                                   {{ currentProvider is null ? 'checked' }}>
+                            <label class="form-check-label" for="2fa_none">
+                                   2FA deaktivieren
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="2fa_provider"
+                                   id="2fa_email" value="email"
+                                   {{ currentProvider == 'email' ? 'checked' }}>
+                            <label class="form-check-label" for="2fa_email">
+                                Email-Verifizierung
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="2fa_provider"
+                                   id="2fa_totp" value="totp"
+                                   {{ currentProvider == 'totp' ? 'checked' }}
+                                   {{ not isTotpEnabled ? 'disabled' }}>
+                            <label class="form-check-label" for="2fa_totp">
+                                Authenticator App (TOTP)
+                                {% if not isTotpEnabled %}
+                                <small class="text-white">- Sie müssen erst TOTP einrichten</small>
+                                {% endif %}
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Speichern</button>
+                    <a href="{{ path('app_dashboard') }}" class="btn btn-secondary">Abbrechen</a>
+
+                </form>
+
+                {% if isTotpEnabled %}
+                    <hr>
+                    <h3>Authenticator App</h3>
+                    <p>
+                        <a href="{{ path('app_authenticate_2fa_enable') }}" class="btn btn-outline-primary">TOTP neu konfigurieren</a>
+                        <a href="{{ path('app_authenticate_2fa_disable') }}" class="btn btn-outline-danger">TOTP deaktivieren</a>
+                    </p>
+                {% else %}
+                    <hr>
+                    <h3>Authenticator App einrichten</h3>
+                    <p>
+                        <a href="{{ path('app_authenticate_2fa_enable') }}" class="btn btn-primary">TOTP aktivieren</a>
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

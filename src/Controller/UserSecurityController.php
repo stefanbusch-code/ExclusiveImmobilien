@@ -5,18 +5,16 @@ namespace App\Controller;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Builder\Builder;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Totp\TotpAuthenticatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\QrCode;
+
 
 
 
@@ -45,6 +43,37 @@ class UserSecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+    #[Route(path:'/dashboard', name: 'app_dashboard')]
+    #[IsGranted('ROLE_USER')]
+    public function dashboard(): Response
+    {
+        return $this->render('security/dashboard.html.twig');
+    }
+
+    #[Route(path: '/dashboard/2fa', name: 'app_dashboard_2fa_settings')]
+    #[IsGranted('ROLE_USER')]
+    public function twoFactorSettings(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if($request->isMethod('POST'))
+        {
+            $provider = $request->request->get('2fa_provider');
+
+            if(in_array($provider, ['email', 'totp', 'none'], true))
+            {
+                $user->setPreferred2faProvider($provider === 'none' ? null :$provider);
+                $entityManager->flush();
+                $this->addFlash('success', '2FA-Einstellungen wurden aktualisiert');
+                return  $this->redirectToRoute('app_dashboard_2fa_settings');
+            }
+        }
+        return $this->render('security/2fa_settings.html.twig', [
+            'isTotpEnabled' => $user->isTotpAuthenticationEnabled(),
+            'currentProvider' => $user->getPreferred2faProvider(),
+        ]);
+    }
+
     #[Route(path: '/authenticate/2fa/enable', name: 'app_authenticate_2fa_enable')]
     #[IsGranted('ROLE_USER')]
     public function enable2fa(TotpAuthenticatorInterface $totpAuthenticator, EntityManagerInterface $entityManager)
@@ -58,6 +87,23 @@ class UserSecurityController extends AbstractController
         }
 
         return $this->render('security/2fa-enable.html.twig', ['user' => $user]);
+    }
+
+    #[Route(path:'/authenticate/2fa/disable', name: 'app_authenticate_2fa_disable')]
+    #[IsGranted('ROLE_USER')]
+    public  function  disable2fa(EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $user->setTotpSecret(null);
+
+        if($user->getPreferred2faProvider() === 'totp')
+        {
+            $user->setPreferred2faProvider(null);
+        }
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Authenticator wurde deaktiviert');
+        return $this->redirectToRoute('app_dashboard_2fa_settings');
     }
 
     #[Route(path: '/authenticate/2fa/qr-code', name: 'app_authenticate_2fa_qr_code')]
@@ -78,7 +124,4 @@ class UserSecurityController extends AbstractController
             ['Content-Type' => 'image/png']
         );
     }
-
-
-
 }

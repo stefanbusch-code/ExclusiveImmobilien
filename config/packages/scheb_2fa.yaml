@@ -11,3 +11,11 @@ scheb_two_factor:
         parameters:
             image: 'https://my-service/img/logo.png'
         template: 'security/2fa_form.html.twig'
+
+
+    email:
+        mailer: App\Service\Email2FAHandler
+        sender_email: 'no-reply@exclusiveimmobilien.com'
+        digits: 6
+        template: 'security/2fa_email_form.html.twig'
+
