@@ -17,5 +17,5 @@ scheb_two_factor:
         mailer: App\Service\Email2FAHandler
         sender_email: 'no-reply@exclusiveimmobilien.com'
         digits: 6
-        template: 'security/2fa_email_form.html.twig'
+        template: 'security/2fa_form.html.twig'
 

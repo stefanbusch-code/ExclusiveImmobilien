@@ -8,33 +8,12 @@
             <div class="login-form mt-4 p-4">
                 <h1 class="h3 mb-3 font-weight-normal">2-Faktor-Authentifizierung!</h1>
                 <p>
-                    Öffne deine App und tippe den Code ein.
+                    Bitte füge hier dein Authentifizierungscode aus der App oder Email ein.
                 </p>
 
-                {#
-                This is a demo template for the authentication form. Please consider overwriting this with your own template,
-                especially when you're using different route names than the ones used here.
-                #}
-
-                {# Authentication errors #}
                 {% if authenticationError %}
                     <div class="alert alert-danger">{{ authenticationError|trans(authenticationErrorData, 'SchebTwoFactorBundle') }}</div>
                 {% endif %}
-
-                {# Let the user select the authentication method
-
-                {% if availableTwoFactorProviders|length > 1 %}
-                    <p>{{ "choose_provider"|trans({}, 'SchebTwoFactorBundle') }}:
-                        {% for provider in availableTwoFactorProviders %}
-                            <a href="{{ path("2fa_login", {"preferProvider": provider}) }}">{{ provider }}</a>
-                        {% endfor %}
-                    </p>
-                {% endif %}
-
-                // Display current two-factor provider
-                <p class="label"><label for="_auth_code">{{ "auth_code"|trans({}, 'SchebTwoFactorBundle') }} {{ twoFactorProvider }}:</label></p>
-                #}
-
 
                 <form class="form" action="{{ checkPathUrl ? checkPathUrl: path(checkPathRoute) }}" method="post">
                     <p class="widget">
@@ -45,12 +24,7 @@
                                 autocomplete="one-time-code"
                                 class="form-control"
                                 autofocus
-                                {#
-                                https://www.twilio.com/blog/html-attributes-two-factor-authentication-autocomplete
-                                If your 2fa methods are using numeric codes only, add these attributes for better user experience:
-                                inputmode="numeric"
-                                pattern="[0-9]*"
-                                #}
+
                         />
                     </p>
 
