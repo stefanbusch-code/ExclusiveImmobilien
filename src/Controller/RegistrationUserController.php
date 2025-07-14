@@ -31,16 +31,26 @@ final class RegistrationUserController extends AbstractController
         $regform = $this->createFormBuilder()
             ->add('email', EmailType::class,[
                 'label' => 'Email',
+                'attr' => [
+                    'placeholder' => 'name@company.com',
+                ]
             ])
 
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'required' => true,
-                'first_options'  => ['label' => 'Passwort'],
-                'second_options' => ['label' => 'Passwort wiederholen'],
+                'first_options'  => ['label' => 'Passwort',
+                    'attr' => [
+                        'placeholder' => '********',
+                    ]
+                ],
+                'second_options' => ['label' => 'Passwort bestätigen',
+                    'attr' => [
+                        'placeholder' => '********',
+                    ]   ],
                 'invalid_message' => 'Die Passwörter stimmen nicht überein.',
             ])
-            ->add('registration', SubmitType::class)
+
             ->getForm()
 
             ;
