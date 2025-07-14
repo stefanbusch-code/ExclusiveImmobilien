@@ -9,9 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class PasswordController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route('/password/change', name: 'app_password_change')]
     public function changePassword(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -28,7 +30,7 @@ final class PasswordController extends AbstractController
             } else {
                 $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
 
-                $entityManager->persist($user);
+
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Passwort wurde geändert!');
