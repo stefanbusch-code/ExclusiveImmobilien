@@ -115,7 +115,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for property in properties %}
                 <div class="flex flex-col h-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                    <!-- Bildbereich (festes Verhältnis) -->
+
                     <a href="{{ path('app_create_property.show',{id: property.id})}}" class="block aspect-w-16 aspect-h-9">
                         <img class="w-full h-48 object-cover rounded-t-lg"
                              src="{{ asset('bilder/' ~ property.bild) }}"
