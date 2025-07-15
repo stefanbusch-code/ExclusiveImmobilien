@@ -5,20 +5,60 @@
 {% block body %}
 
     <div class="container" style="margin-top: 100px">
-        <h1>Kontaktformular</h1>
-        {% for message in app.flashes('success') %}
-            <div class="alert-success"> {{ message }}</div>
-        {% endfor %}
+
+        <section class="bg-white dark:bg-gray-900">
+            <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+                <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Kontakt</h2>
+                <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Hast du Fragen, Anregungen oder auch Feedback, dann kontaktiere uns.</p>
 
 
-        {{ form_start(contactForm) }}
-            {{ form_row(contactForm.name) }}
-            {{ form_row(contactForm.email) }}
-            {{ form_row(contactForm.subject) }}
-            {{ form_row(contactForm.message) }}
-            <button class="btn btn-primary">Absenden</button>
-        {{ form_end(contactForm) }}
+                <form method="post" action="{{ path('app_contact') }}" class="space-y-8">
 
+
+                    {% for message in app.flashes('success') %}
+                        <div class="alert-success"> {{ message }}</div>
+                    {% endfor %}
+
+                    {{ form_start(contactForm) }}
+
+                    {{ form_row(contactForm.name, {
+                        label:'Name',
+                        attr: {
+                            class: 'shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light',
+                            placeholder: 'deine Name'
+                        }
+                    }) }}
+
+                    {{ form_row(contactForm.email, {
+                        label:'E-Mail-Adresse',
+                        attr: {
+                            class: 'shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light',
+                            placeholder: 'deine@mailadresse.de'
+                        }
+                    }) }}
+
+                    {{ form_row(contactForm.subject, {
+                        label:'Betreff',
+                        attr: {
+                            class: 'shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light',
+                            placeholder: 'dein Betreff'
+                        }
+                    }) }}
+
+                    {{ form_row(contactForm.message, {
+                        label:'Nachricht',
+                        attr: {
+                            class: 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
+                            placeholder: 'deine Nachricht'
+                        }
+                    }) }}
+
+                    <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Nachricht senden</button>
+
+
+                    {{ form_end(contactForm) }}
+                </form>
+            </div>
+        </section>
     </div>
-
 {% endblock %}
