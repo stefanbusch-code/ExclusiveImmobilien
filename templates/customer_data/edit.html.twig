@@ -1,21 +1,110 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container" style="margin-top: 100px;">
-        <h1>Meine Daten ändern:</h1>
+    <div class="container mx-auto px-4 py-8" style="margin-top: 100px;>
+        <section class="bg-gray-50 dark:bg-gray-900">
 
-        {{ form_start(form) }}
-            {{ form_row(form.phone) }}
-            {{ form_row(form.firstname) }}
-            {{ form_row(form.lastname) }}
-            {{ form_row(form.street) }}
-            {{ form_row(form.streetnumber) }}
-            {{ form_row(form.zipcode) }}
-            {{ form_row(form.city) }}
-            {{ form_row(form.state) }}
-            {{ form_row(form.country) }}
-            <button class="btn btn-primary">Speichern</button>
-        {{ form_end(form) }}
-    </div>
+                <div class="max-w-screen-xl mx-auto p-4 text-center">
+                    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Meine Daten <span class="text-blue-600 dark:text-blue-500">ändern</span></h1>
+                </div>
+
+                <div class="flex flex-col items-center justify-center px-4 py-8 mx-auto lg:py-0">
+
+                <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-6 space-y-6 md:space-y-8 sm:p-8">
+
+                        {% for flash in app.flashes('success') %}
+                            <div class="p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400">
+                                {{ flash }}
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+                        <div class="grid gap-6 md:grid-cols-2">
+                            {{ form_row(form.firstname, {
+                                'label': 'Vorname',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': 'Max'
+                                }
+                            }) }}
+
+                            {{ form_row(form.lastname, {
+                                'label': 'Nachname',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': 'Mustermann'
+                                }
+                            }) }}
+                        </div>
+
+                        {{ form_row(form.phone, {
+                            'label': 'Telefonnummer',
+                            'attr': {
+                                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                'placeholder': '+49 123 456789'
+                            }
+                        }) }}
+
+                        <div class="grid gap-6 md:grid-cols-3">
+                            {{ form_row(form.street, {
+                                'label': 'Straße',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': 'Musterstraße'
+                                }
+                            }) }}
+
+                            {{ form_row(form.streetnumber, {
+                                'label': 'Hausnummer',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': '10'
+                                }
+                            }) }}
+
+                            {{ form_row(form.zipcode, {
+                                'label': 'PLZ',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': '12345'
+                                }
+                            }) }}
+                        </div>
+
+                        <div class="grid gap-6 md:grid-cols-2">
+                            {{ form_row(form.city, {
+                                'label': 'Stadt',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': 'Musterstadt'
+                                }
+                            }) }}
+
+                            {{ form_row(form.state, {
+                                'label': 'Bundesland',
+                                'attr': {
+                                    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                    'placeholder': 'Bayern'
+                                }
+                            }) }}
+                        </div>
+
+                        {{ form_row(form.country, {
+                            'label': 'Land',
+                            'attr': {
+                                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                                'placeholder': 'Deutschland'
+                            }
+                        }) }}
+
+                        <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Speichern
+                        </button>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
 {% endblock %}
-
