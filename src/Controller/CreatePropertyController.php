@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Location;
 use App\Entity\Property;
 use App\Form\PropertyType;
+use App\Repository\CategoryRepository;
+use App\Repository\LocationRepository;
 use App\Repository\PropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,12 +18,78 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CreatePropertyController extends AbstractController
 {
     #[Route('/createproperty', name: 'app_create_property.')]
-    public function index(PropertyRepository $pr): Response
+    public function index(PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, Request $request): Response
     {
-        $properties = $pr->findAll();
+        $queryParams = $request->query->all();
+
+        $selectedPreis = $queryParams['preis'] ?? null;
+        $selectedTowns = $queryParams['towns'] ?? [];
+        $selectedCategories = $queryParams['categories'] ?? [];
+        $selectedCountries = $queryParams['countries'] ?? [];
+
+        // Sicherstellen, dass Arrays vorliegen
+        if (!is_array($selectedTowns)) $selectedTowns = [$selectedTowns];
+        if (!is_array($selectedCategories)) $selectedTowns = [$selectedCategories];
+        if (!is_array($selectedCountries)) $selectedTowns = [$selectedCountries];
+
+        $criteria = [
+            'preis' => $selectedPreis,
+            'towns' => $selectedTowns,
+            'categories' => $selectedCategories,
+            'countries' => $selectedCountries
+        ];
+
+        $properties = $propertyRepository->findByFilters($criteria);
+
+        $priceRanges = [
+            '0 - 100.000' => [0, 100000],
+            '100.000 - 500.000' => [100000, 500000],
+            '500.000 - 1.000.000' => [500000, 1000000],
+            '1.000.000 - 2.500.000' => [1000000, 2500000],
+            '2.500.000 - 50000000' => [2500000, 5000000],
+            '5.000.000+'=>[5000000, null],
+        ];
+
+
+
+        if($selectedPreis){
+            list($minPreis, $maxPreis) = explode('-', $selectedPreis);
+            $criteria['preis'] = [
+                'min' => $minPreis,
+                'max' => $maxPreis
+            ];
+        }
+        if($selectedCategories){
+            $criteria['categories'] = $selectedCategories;
+        }
+        if($selectedTowns){
+            $criteria['towns'] = $selectedTowns;
+        }
+        if($selectedCountries){
+            $criteria['countries'] = $selectedCountries;
+        }
+
+        $properties = $propertyRepository->findByFilters($criteria, $selectedPreis);
+
+        $towns = $locationRepository->findDistinctTowns();
+        $countries = $locationRepository->findDistinctCountries();
+        $preise = $propertyRepository->findDistinctPreise();
+        $categories = $categoryRepository->findAll();
+
         return $this->render('create_property/index.html.twig', [
             'properties' => $properties,
+            'towns' => $towns,
+            'categories' => $categories,
+            'countries' => $countries,
+            'selectedTowns' => $selectedTowns,
+            'selectedCountries' => $selectedCountries,
+            'selectedPreis' => $selectedPreis,
+            'selectedCategories' => $selectedCategories,
+            'preise' => $preise,
+            'priceRanges' => $priceRanges
         ]);
+
+
     }
     #[Route('/createproperty/create', name: 'app_create_property.create')]
     public function createProperty (Request $request, EntityManagerInterface $entityManager): Response
@@ -97,4 +165,5 @@ final class CreatePropertyController extends AbstractController
                     'property' => $property,
                 ]);
             }
+
 }

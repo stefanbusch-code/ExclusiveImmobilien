@@ -68,25 +68,38 @@ class PropertyRepository extends ServiceEntityRepository
         $locationFields = ['location_town', 'region', 'country'];
 
         foreach ($criteria as $field => $value) {
-            if (in_array($field, $locationFields)) {
-                $qb->andWhere("l.$field = :$field")->setParameter($field, $value);
-            } else {
+            if ($field == 'preis' && is_array($value)) {
+                $minPreis = $value['min'] ?? null;
+                $maxPreis = $value['max'] ?? null;
 
-                if ($field == 'preis' && is_array($value)) {
-                    $minPreis = $value['min'];
-                    $maxPreis = $value['max'];
-
-                    if ($minPreis) {
-                        $qb->andWhere('p.preis >= :minPreis')->setParameter('minPreis', (int)$minPreis);
-                    }
-                    if ($maxPreis) {
-                        $qb->andWhere('p.preis <= :maxPreis')->setParameter('maxPreis', (int)$maxPreis);
-                    }
-                } else {
-                    $qb->andWhere("p.$field = :$field")->setParameter($field, $value);
+                if ($minPreis !== null) {
+                    $qb->andWhere('p.preis >= :minPreis')
+                        ->setParameter('minPreis', (int)$minPreis);
+                }
+                if ($maxPreis !== null) {
+                    $qb->andWhere('p.preis <= :maxPreis')
+                        ->setParameter('maxPreis', (int)$maxPreis);
                 }
             }
         }
+
+        if (!empty($criteria['towns'])) {
+            $qb->andWhere('l.location_town IN (:towns)')
+                ->setParameter('towns', $criteria['towns']);
+        }
+
+        // Land-Filter
+        if (!empty($criteria['countries'])) {
+            $qb->andWhere('l.country IN (:countries)')
+                ->setParameter('countries', $criteria['countries']);
+        }
+
+        // Kategorie-Filter
+        if (!empty($criteria['categories'])) {
+            $qb->andWhere('c.id IN (:categories)')
+                ->setParameter('categories', $criteria['categories']);
+        }
+
 
         return $qb->getQuery()->getResult();
     }
@@ -97,6 +110,26 @@ class PropertyRepository extends ServiceEntityRepository
             ->select('Distinct p.preis')
             ->where('p.preis IS NOT NULL')
             ->orderBy('p.preis','ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    public function findDistinctCountries(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT l.country')
+            ->join('p.location', 'l')
+            ->orderBy('l.country', 'ASC')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    public function findDistinctCities(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('DISTINCT l.locationTown')
+            ->join('p.location', 'l')
+            ->orderBy('l.locationTown', 'ASC')
             ->getQuery()
             ->getSingleColumnResult();
     }
