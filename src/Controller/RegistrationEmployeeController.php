@@ -36,7 +36,6 @@ final class RegistrationEmployeeController extends AbstractController
                 'second_options' => ['label' => 'Repeat Password'],
                 'invalid_message' => 'Die Passwörter stimmen nicht überein.',
             ])
-            ->add('registration', SubmitType::class)
             ->getForm()
 
             ;

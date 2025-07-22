@@ -62,4 +62,31 @@ final class WishlistController extends AbstractController
         return $this->redirectToRoute('app_wishlist');
     }
 
+    #[Route('/wishlist/toggle/{id}', name:'app_wishlist_toggle')]
+    public function toggleWishlist(Property $property, WishlistRepository $wishlistRepository, EntityManagerInterface $em): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $customer = $user->getCustomer();
+
+        $existing = $wishlistRepository->findOneBy([
+            'customer' => $customer,
+            'property' => $property
+        ]);
+
+        if ($existing) {
+            $em->remove($existing);
+        } else {
+            $wishlist = new Wishlist();
+            $wishlist->setCustomer($customer);
+            $wishlist->setProperty($property);
+            $em->persist($wishlist);
+        }
+
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('app_create_property.show', ['id' => $property->getId()]));
+    }
+
+
 }

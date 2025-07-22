@@ -1,46 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container" style="margin-top: 100px;">
-    <h1>Meine Daten</h1>
-    <br>
-    <div class="card" style="width: 25rem;">
-        <ul class="list-group list-group-flush ">
-            <li class="list-group-item text-bg-dark">{{ email }}</li>
-            <li class="list-group-item text-bg-dark">{{ employee.firstname }}</li>
-            <li class="list-group-item text-bg-dark">{{ employee.lastname }}</li>
-            <li class="list-group-item text-bg-dark">{{ employee.phone }}</li>
-        </ul>
-        <a href="{{ path('app_employee_data_edit') }}" type="button" class="btn btn-primary">Daten ändern</a>
-    </div>
-    {# <div>
-        <table>
-            <tbody>
-            {% if employee %}
-            <tr>
-                <th scope="row">Email: </th>
-                <td>{{ email }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Mein Vorname: </th>
-                <td>{{ employee.firstname }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Mein Nachname: </th>
-                <td>{{ employee.lastname }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Telefon: </th>
-                <td>{{ employee.phone }}</td>
-            </tr>
-                {% else %}
-                <tr>
-                    <td colspan="2">Keine Mitarbeiter Daten verfügbar</td>
-                </tr>
-            {% endif %}
-            </tbody>
-        </table>
-    </div> #}
 
-</div>
+    <div class="container" style="margin-top: 100px;">
+        <div class="max-w-screen-xl mx-auto p-4 text-center">
+
+            <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Meine <span class="text-blue-600 dark:text-blue-500">Daten</span></h1>
+
+        </div>
+
+        <div class="max-w-screen-xl mx-auto p-4 lg:mb-16">
+
+            <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                <div class="flex flex-col pb-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">E-Mail-Address:</dt>
+                    <dd class="text-lg font-semibold">{{ email }}</dd>
+                </div>
+                <div class="flex flex-col py-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vorname:</dt>
+                    <dd class="text-lg font-semibold">{{ employee.firstname }}</dd>
+                </div>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Nachname:</dt>
+                    <dd class="text-lg font-semibold">{{ employee.lastname }}</dd>
+                </div>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Telefonnummer:</dt>
+                    <dd class="text-lg font-semibold">{{ employee.phone }}</dd>
+                </div>
+            </dl>
+
+            <br>
+
+            <div class="mt-3">
+                <a class="flex-1 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-re-800"
+                   href="{{ path('app_employee_data_edit') }}">Daten ändern</a>
+            </div>
+
+        </div>
+    </div>
+
 {% endblock %}

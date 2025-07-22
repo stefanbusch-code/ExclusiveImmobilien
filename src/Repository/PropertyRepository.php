@@ -16,6 +16,8 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
 
+
+
     public function findRandomProperties(int $limit=3):array
     {
         $conn = $this->getEntityManager()->getConnection();

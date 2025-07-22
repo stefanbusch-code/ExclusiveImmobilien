@@ -8,6 +8,7 @@ use App\Form\PropertyType;
 use App\Repository\CategoryRepository;
 use App\Repository\LocationRepository;
 use App\Repository\PropertyRepository;
+use App\Repository\WishlistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -159,10 +160,25 @@ final class CreatePropertyController extends AbstractController
     }
 
     #[Route('/createproperty/show/{id}', name: 'app_create_property.show')]
-    public function show(Property $property, EntityManagerInterface $entityManager): Response
+    public function show(Property $property, EntityManagerInterface $entityManager, WishlistRepository $wishlistRepository): Response
     {
+        /** @var \App\Entity\User|null $user */
+        $user = $this->getUser();
+
+        $wishlistPropertyIds = [];
+
+        if ($user && in_array('ROLE_CUSTOMER', $user->getRoles(), true)) {
+            $customer = $user->getCustomer();
+            $wishlistItems = $wishlistRepository->findBy(['customer' => $customer]);
+            $wishlistPropertyIds = array_map(
+                fn($wishlist) => $wishlist->getProperty()->getId(),
+                $wishlistItems
+            );
+        }
+
         return $this->render('create_property/show.html.twig', [
             'property' => $property,
+            'wishlistPropertyIds' => $wishlistPropertyIds,
         ]);
     }
 

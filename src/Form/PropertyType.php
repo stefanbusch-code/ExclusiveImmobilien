@@ -46,12 +46,6 @@ class PropertyType extends AbstractType
                 'class' => Category::class,
                 'label' => 'Kategorie',
                 'placeholder' => 'Kategorie auswählen...'
-            ])
-            ->add('speichern', SubmitType::class,[
-                'label' => 'Speichern',
-                'attr' => [
-                    'class' => 'btn btn-success'
-                ]
             ]);
 
     }
