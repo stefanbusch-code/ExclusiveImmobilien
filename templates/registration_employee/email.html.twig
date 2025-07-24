@@ -1,0 +1,43 @@
+{% apply inline_css %}
+
+    <style>
+
+        body, .email-container{
+            background-color: #3b3f45;
+            padding: 20px;
+            font-family: Arial,sans-serif;
+        }
+
+        .email-content{
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h1{
+            color: #333333;
+        }
+
+        h3{
+            color: #25a1dd;
+        }
+    </style>
+    <div class="email-container">
+        <div class="email-content">
+            <h1>Hi!</h1>
+
+            <p>hier kannst du dich für unser Mitarbeiterportal registrieren. Klick auf den Link um zum Registrierungsformular weiter geleitet zu werden:</p>
+
+            <p>
+                <a href="{{ registrationUrl }}"
+                   class="flex-1 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Hier klicken
+                </a>
+            </p>
+            <p>Um vollen Zugriff zu haben, bitte registrieren.</p>
+
+            <p>Beste Grüße, dein Team</p>
+        </div>
+    </div>
+
+{% endapply %}
