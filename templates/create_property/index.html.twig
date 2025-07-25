@@ -191,13 +191,13 @@
                                     <div id="dreipunkte-dropdown-{{ property.id }}" class="hidden z-10 w-44 bg-gray-100 border border-gray-200 rounded divide-y divide-gray-200 shadow dark:bg-gray-700 dark:divide-gray-600">
                                         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dreipunkte-dropdown-button">
                                             <li>
-                                                <a href="{{ path('app_create_property.show',{id: property.id})}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ansehen</a>
+                                                <a href="{{ path('app_create_property.show',{id: property.id})}}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-blue-700 dark:hover:text-white">Ansehen</a>
                                             </li>
                                             <li>
-                                                <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                                                <a href="{{ path('app_property_edit',{id: property.id}) }}" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-blue-700 dark:hover:text-white">Edit</a>
                                             </li>
                                             <li>
-                                                <a href="{{ path('app_create_property.delete',{id: property.id}) }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">löschen</a>
+                                                <a href="{{ path('app_create_property.delete',{id: property.id}) }}" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-blue-700 dark:text-gray-200 dark:hover:text-white">löschen</a>
                                             </li>
                                         </ul>
                                     </div>
