@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfiguration;
 use Scheb\TwoFactorBundle\Model\Totp\TotpConfigurationInterface;
 use Scheb\TwoFactorBundle\Model\Totp\TwoFactorInterface;
@@ -22,7 +23,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $preferred2faProvider = null;
 
     #[ORM\Column(type: 'string', length: 6, nullable: true)]
-    private ?string $emailAuthCode = null; // 👈 Neue Property für den Code
+    private ?string $emailAuthCode = null;
+
+
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -29,6 +29,23 @@ class PropertyDataController extends AbstractController
 
         if($propertyForm->isSubmitted()&& $propertyForm->isValid()) {
 
+            $bild = $propertyForm->get('bild')->getData();
+
+
+            if ($bild) {
+                $dateiname = md5(uniqid()) . '.' . $bild->guessClientExtension();
+                $bild->move($this->getParameter('bilder_ordner'), $dateiname);
+                $property->setBild($dateiname);
+            } else {
+                // altes Bild erhalten (falls nötig)
+                $existing = $entityManager->getUnitOfWork()->getOriginalEntityData($property);
+                if (isset($existing['bild'])) {
+                    $property->setBild($existing['bild']);
+                }
+            }
+
+
+
             $location = $property->getLocation();
 
             $newPropertyTitle = $propertyForm->get('property_title')->getData();

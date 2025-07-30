@@ -108,7 +108,7 @@ final class CreatePropertyController extends AbstractController
 
             if($bild)
             {
-                $dateiname =md5(uniqid(). '.'. $bild->guessClientExtension());
+                $dateiname =md5(uniqid()) . '.'. $bild->guessClientExtension();
             }
             $bild->move
             (

@@ -19,3 +19,6 @@ scheb_two_factor:
         digits: 6
         template: 'security/2fa_form.html.twig'
 
+    backup_codes:
+        enabled: true
+

@@ -46,6 +46,12 @@ class PropertyEditType extends AbstractType
                 'class' => Category::class,
                 'label' => 'Kategorie',
                 'placeholder' => 'Kategorie auswählen...'
+            ])
+            ->add('bild', FileType::class, [
+                'label'=>'Bild',
+                'mapped'=> true,
+                'required'=> false,
+                'data_class'=> null,
             ]);
 
     }
