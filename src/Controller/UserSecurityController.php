@@ -112,4 +112,7 @@ class UserSecurityController extends AbstractController
             ['Content-Type' => 'image/png']
         );
     }
+
+
+
 }

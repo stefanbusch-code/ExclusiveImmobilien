@@ -10,13 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
 
 class HouseController extends AbstractController
 {
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
-    public function all(?string $slug, Request $request, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, WishlistRepository $wishlistRepository):Response
+    public function all(?string $slug, Request $request, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, WishlistRepository $wishlistRepository, AuthenticationUtils $authenticationUtils):Response
     {
+        $lastUsername = $authenticationUtils->getLastUsername();
+
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
         $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
 
@@ -85,6 +88,7 @@ class HouseController extends AbstractController
             'selectedPreis' => $selectedPreis,
             'priceRanges' => $priceRanges,
             'wishlistPropertyIds' => $wishlistPropertyIds,
+            'last_username' => $lastUsername,
         ]);
     }
 
