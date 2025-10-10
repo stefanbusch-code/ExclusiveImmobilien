@@ -85,21 +85,27 @@ class PropertyRepository extends ServiceEntityRepository
             }
         }
 
-        if (!empty($criteria['towns'])) {
-            $qb->andWhere('l.location_town IN (:towns)')
-                ->setParameter('towns', $criteria['towns']);
+        if (!empty($criteria['location_town'])) {
+            $qb->andWhere('l.location_town IN (:town)')
+                ->setParameter('town', $criteria['location_town']);
         }
 
         // Land-Filter
-        if (!empty($criteria['countries'])) {
-            $qb->andWhere('l.country IN (:countries)')
-                ->setParameter('countries', $criteria['countries']);
+        if (!empty($criteria['country'])) {
+            $qb->andWhere('l.country IN (:country)')
+                ->setParameter('country', $criteria['country']);
+        }
+
+        // Region-Filter
+        if (!empty($criteria['region'])) {
+            $qb->andWhere('l.region = :region')
+                ->setParameter('region', $criteria['region']);
         }
 
         // Kategorie-Filter
-        if (!empty($criteria['categories'])) {
-            $qb->andWhere('c.id IN (:categories)')
-                ->setParameter('categories', $criteria['categories']);
+        if (!empty($criteria['category'])) {
+            $qb->andWhere('c.id IN (:category)')
+                ->setParameter('category', $criteria['category']);
         }
 
 
