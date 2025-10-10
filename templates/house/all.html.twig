@@ -71,7 +71,7 @@
 
                 <div class="max-w-sm">
                     <label for="Stadt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Stadt wählen</label>
-                    <select class="form-select" name="town" id="town" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select class="form-select" name="town" id="towns" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="">Alle Städte</option>
                         {% for t in towns %}
                             <option value="{{ t }}" {{ selectedTown == t ? 'selected' : '' }}> {{ t }}</option>
@@ -91,7 +91,7 @@
 
                 <div class="max-w-sm">
                     <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Land wählen</label>
-                    <select class="form-select" name="country" id="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select class="form-select" name="country" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="">Alle Länder</option>
                         <option value="">Alle Länder</option>
                         {% for c in countries %}
@@ -139,7 +139,14 @@
                             </p>
 
                             <div class="mt-auto flex justify-between space-x-2">
-                                <a href="{{ path('app_create_property.show',{id: property.id})}}"
+                                <a href="{{ path('app_create_property.show', {
+                                    id: property.id,
+                                    preis: selectedPreis,
+                                    towns: selectedTown ? selectedTown|join(',') : '',
+                                    categories: selectedCategories ? selectedCategories|join(',') : '',
+                                    countries: selectedCountry ? selectedCountry|join(',') : '',
+                                    slug: category ? category.discription : null
+                                }) }}"
                                    class="flex-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Mehr Infos
                                 </a>
