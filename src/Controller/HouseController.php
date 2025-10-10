@@ -89,6 +89,8 @@ class HouseController extends AbstractController
             'priceRanges' => $priceRanges,
             'wishlistPropertyIds' => $wishlistPropertyIds,
             'last_username' => $lastUsername,
+            'selectedCategories' => $category ? [$category->getDiscription()] : [],
+            'selectedTowns' => $selectedTown ? [$selectedTown] : [],
         ]);
     }
 

@@ -160,7 +160,7 @@ final class CreatePropertyController extends AbstractController
     }
 
     #[Route('/createproperty/show/{id}', name: 'app_create_property.show')]
-    public function show(Property $property, EntityManagerInterface $entityManager, WishlistRepository $wishlistRepository): Response
+    public function show(Property $property, EntityManagerInterface $entityManager, WishlistRepository $wishlistRepository, Request $request): Response
     {
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
@@ -176,9 +176,31 @@ final class CreatePropertyController extends AbstractController
             );
         }
 
+        // Filter aus Query-Parametern als Strings abrufen
+        $selectedPreis = $request->query->get('preis');
+
+        $selectedTowns = $request->query->get('towns');
+        $selectedTowns = $selectedTowns ? explode(',', $selectedTowns) : [];
+
+        $selectedCategories = $request->query->get('categories');
+        $selectedCategories = $selectedCategories ? explode(',', $selectedCategories) : [];
+
+        $selectedCountries = $request->query->get('countries');
+        $selectedCountries = $selectedCountries ? explode(',', $selectedCountries) : [];
+
+        $slug = $request->query->get('slug');
+
+        $category = $selectedCategories[0] ?? null;
+
         return $this->render('create_property/show.html.twig', [
             'property' => $property,
             'wishlistPropertyIds' => $wishlistPropertyIds,
+            'selectedPreis' => $selectedPreis,
+            'selectedTowns' => $selectedTowns,
+            'selectedCategories' => $selectedCategories,
+            'selectedCountries' => $selectedCountries,
+            'slug' => $slug,
+            'category' => $category,
         ]);
     }
 
