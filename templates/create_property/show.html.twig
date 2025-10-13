@@ -80,13 +80,14 @@
 
                     <div class="mt-4">
                         <a href="{{ path('app_house_all', {
-                            id: property.id,
-                            preis: selectedPreis,
-                            towns: selectedTowns ? selectedTowns|join(',') : '',
-                            categories: selectedCategories ? selectedCategories|join(',') : '',
-                            countries: selectedCountries ? selectedCountries|join(',') : '',
                             slug: category ? category : null
-                        }) }}"
+                        }) ~ '?' ~
+                        'preis=' ~ (selectedPreis ?: '') ~
+                        '&town=' ~ (selectedTowns|join(',')) ~
+                        '&region=' ~ (selectedRegion|join(',')) ~
+                        '&categories=' ~ (selectedCategories|join(',')) ~
+                        '&country=' ~ (selectedCountries|join(','))
+                        }}"
                            class="inline-block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Zurück zu den Suchergebnissen
                         </a>

@@ -182,6 +182,9 @@ final class CreatePropertyController extends AbstractController
         $selectedTowns = $request->query->get('towns');
         $selectedTowns = $selectedTowns ? explode(',', $selectedTowns) : [];
 
+        $selectedRegion = $request->query->get('region');
+        $selectedRegion = $selectedRegion ? explode(',', $selectedRegion) : [];
+
         $selectedCategories = $request->query->get('categories');
         $selectedCategories = $selectedCategories ? explode(',', $selectedCategories) : [];
 
@@ -197,6 +200,7 @@ final class CreatePropertyController extends AbstractController
             'wishlistPropertyIds' => $wishlistPropertyIds,
             'selectedPreis' => $selectedPreis,
             'selectedTowns' => $selectedTowns,
+            'selectedRegion' => $selectedRegion,
             'selectedCategories' => $selectedCategories,
             'selectedCountries' => $selectedCountries,
             'slug' => $slug,
