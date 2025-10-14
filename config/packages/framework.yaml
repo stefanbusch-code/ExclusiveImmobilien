@@ -23,6 +23,11 @@ framework:
             limit: 10
             interval: '1 minute'
 
+        property_filter_limiter:
+            policy: 'sliding_window'
+            limit: 30
+            interval: '1 minute'
+
 
 when@test:
     framework:
