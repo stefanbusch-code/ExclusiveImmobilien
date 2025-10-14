@@ -17,6 +17,13 @@ framework:
     php_errors:
         log: true
 
+    rate_limiter:
+        property_search_limiter:
+            policy: 'sliding_window'
+            limit: 10
+            interval: '1 minute'
+
+
 when@test:
     framework:
         test: true

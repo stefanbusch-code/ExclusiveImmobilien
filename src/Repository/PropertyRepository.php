@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Property>
@@ -106,6 +107,22 @@ class PropertyRepository extends ServiceEntityRepository
         if (!empty($criteria['category'])) {
             $qb->andWhere('c.id IN (:category)')
                 ->setParameter('category', $criteria['category']);
+        }
+
+        // Such-Filter
+        if(!empty($criteria['search'])){
+            $searchTerm = $criteria['search'];
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('p.property_title', ':search'),
+                    $qb->expr()->like('p.property_discription', ':search'),
+                    $qb->expr()->like('l.location_town', ':search'),
+                    $qb->expr()->like('l.region', ':search'),
+                    $qb->expr()->like('l.country', ':search'),
+                    $qb->expr()->like('c.discription', ':search')
+                )
+            )
+                ->setParameter('search', '%'.$searchTerm.'%');
         }
 
 

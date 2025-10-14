@@ -9,6 +9,7 @@ use App\Repository\WishlistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
@@ -16,7 +17,16 @@ use function Symfony\Component\String\u;
 class HouseController extends AbstractController
 {
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
-    public function all(?string $slug, Request $request, PropertyRepository $propertyRepository, CategoryRepository $categoryRepository, LocationRepository $locationRepository, WishlistRepository $wishlistRepository, AuthenticationUtils $authenticationUtils):Response
+    public function all(
+        ?string $slug,
+        Request $request,
+        PropertyRepository $propertyRepository,
+        CategoryRepository $categoryRepository,
+        LocationRepository $locationRepository,
+        WishlistRepository $wishlistRepository,
+        AuthenticationUtils $authenticationUtils,
+        RateLimiterFactory $property_search_limiter_limiter,
+    ):Response
     {
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -27,6 +37,23 @@ class HouseController extends AbstractController
         $selectedRegion =$request->query->get('region');
         $selectedCountry =$request->query->get('country');
         $selectedPreis =$request->query->get('preis');
+        $searchTerm = $request->query->get('search'); //suche
+
+        if($searchTerm){
+            $limiter = $property_search_limiter_limiter->create($this->getUser()?->getId() ?? $request->getClientIp());
+            $limit = $limiter->consume(1);
+
+            if(!$limit->isAccepted()){
+                $this->addFlash('error', 'Zu viele Suchanfragen. Bitte warten Sie eine Minute');
+                return $this->redirectToRoute('app_house_all',[
+                    'slug' => $slug,
+                    'town' => $selectedTown,
+                    'region' => $selectedRegion,
+                    'country' => $selectedCountry,
+                    'preis' => $selectedPreis
+                ]);
+            }
+        }
 
         $priceRanges = [
             '0 - 100.000' => [0, 100000],
@@ -58,6 +85,9 @@ class HouseController extends AbstractController
                 'max' => $maxPreis
             ];
         }
+        if($searchTerm){
+            $criteria['search'] = $searchTerm;
+        }
 
         $properties = $propertyRepository->findByFilters($criteria, $selectedPreis);
 
@@ -86,6 +116,7 @@ class HouseController extends AbstractController
             'selectedRegion' => $selectedRegion,
             'selectedCountry' => $selectedCountry,
             'selectedPreis' => $selectedPreis,
+            'searchTerm' => $searchTerm, //search
             'priceRanges' => $priceRanges,
             'wishlistPropertyIds' => $wishlistPropertyIds,
             'last_username' => $lastUsername,
