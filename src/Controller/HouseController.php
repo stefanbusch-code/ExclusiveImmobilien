@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
 
@@ -26,8 +28,17 @@ class HouseController extends AbstractController
         WishlistRepository $wishlistRepository,
         AuthenticationUtils $authenticationUtils,
         RateLimiterFactory $property_search_limiter_limiter,
+        CsrfTokenManagerInterface $csrfTokenManager
     ):Response
     {
+        if($request->query->has('_token') && $this->getUser()) {
+            $token = $request->query->get('_token');
+            if(!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
+                $this->addFlash('error', 'Ungültige Anfrage');
+                return $this->redirectToRoute('app_house_all');
+            }
+        }
+
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
