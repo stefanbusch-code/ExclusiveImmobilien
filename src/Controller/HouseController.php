@@ -15,6 +15,8 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
+use App\Dto\PropertyFilterDto;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class HouseController extends AbstractController
 {
@@ -29,17 +31,49 @@ class HouseController extends AbstractController
         AuthenticationUtils $authenticationUtils,
         RateLimiterFactory $property_search_limiter_limiter,
         RateLimiterFactory $property_filter_limiter_limiter,
-        CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ValidatorInterface $validator,
     ):Response
     {
         // CSRF Token
-        if($request->query->has('_token') && $this->getUser()) {
+        if($this->getUser()) {
+            if (!$request->query->has('_token')) {
+                // Token fehlt komplett -> blockieren
+                $this->addFlash('error', 'Ungültige Anfrage (CSRF Token fehlt).');
+                return $this->redirectToRoute('app_house_all');
+            }
+
             $token = $request->query->get('_token');
             if(!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
-                $this->addFlash('error', 'Ungültige Anfrage');
+                $this->addFlash('error', 'Ungültige Anfrage (CSRF Token ungültig).');
                 return $this->redirectToRoute('app_house_all');
             }
         }
+
+        // Eingabeprüfung mit DTO und Validator
+
+        $dto = new PropertyFilterDto();
+        $dto->search = $request->query->get('search');
+        $dto->preis = $request->query->get('preis');
+        $dto->town = $request->query->get('town');
+        $dto->region = $request->query->get('region');
+        $dto->country = $request->query->get('country');
+
+        $errors = $validator->validate($dto);
+
+        if(count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash('error', sprintf('%s: %s', $error->getPropertyPath(), $error->getMessage()));
+            }
+
+            return $this->redirectToRoute('app_house_all');
+        }
+
+        $selectedPreis = $dto->preis;
+        $selectedTown = $dto->town;
+        $selectedRegion = $dto->region;
+        $selectedCountry = $dto->country;
+        $searchTerm = $dto->search;
 
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -60,7 +94,7 @@ class HouseController extends AbstractController
             || $request->query->get('preis');
 
         if ($hasAnyFilter) {
-            $limiter = $property_search_limiter_limiter->create($this->getUser()?->getID() ?? $request->getClientIp());
+            $limiter = $property_filter_limiter_limiter->create($this->getUser()?->getID() ?? $request->getClientIp());
             if(!$limiter->consume(1)->isAccepted()) {
                 $this->addFlash('error','Zu viele Filter-Anfragen. Bitte warten Sie eine Minute.');
                 return $this->redirectToRoute('app_house_all');
