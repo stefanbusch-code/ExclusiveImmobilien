@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
 
@@ -26,8 +28,19 @@ class HouseController extends AbstractController
         WishlistRepository $wishlistRepository,
         AuthenticationUtils $authenticationUtils,
         RateLimiterFactory $property_search_limiter_limiter,
+        RateLimiterFactory $property_filter_limiter_limiter,
+        CsrfTokenManagerInterface $csrfTokenManager
     ):Response
     {
+        // CSRF Token
+        if($request->query->has('_token') && $this->getUser()) {
+            $token = $request->query->get('_token');
+            if(!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
+                $this->addFlash('error', 'Ungültige Anfrage');
+                return $this->redirectToRoute('app_house_all');
+            }
+        }
+
         $lastUsername = $authenticationUtils->getLastUsername();
 
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
@@ -37,8 +50,24 @@ class HouseController extends AbstractController
         $selectedRegion =$request->query->get('region');
         $selectedCountry =$request->query->get('country');
         $selectedPreis =$request->query->get('preis');
-        $searchTerm = $request->query->get('search'); //suche
+        $searchTerm = $request->query->get('search'); //für die Suche
 
+        //Rate Limiter für Filter-Anfragen
+        $hasAnyFilter = $request->query->get('search')
+            || $request->query->get('town')
+            || $request->query->get('region')
+            || $request->query->get('country')
+            || $request->query->get('preis');
+
+        if ($hasAnyFilter) {
+            $limiter = $property_search_limiter_limiter->create($this->getUser()?->getID() ?? $request->getClientIp());
+            if(!$limiter->consume(1)->isAccepted()) {
+                $this->addFlash('error','Zu viele Filter-Anfragen. Bitte warten Sie eine Minute.');
+                return $this->redirectToRoute('app_house_all');
+            }
+        }
+
+        //Rate Limiter für Suchanfragen
         if($searchTerm){
             $limiter = $property_search_limiter_limiter->create($this->getUser()?->getId() ?? $request->getClientIp());
             $limit = $limiter->consume(1);

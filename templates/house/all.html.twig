@@ -76,6 +76,10 @@
 
                     <form method="get" action="{{ path('app_house_all', {slug:category ? category.discription : null}) }}">
 
+                        {% if app.user %}
+                            <input type="hidden" name="_token" value="{{ csrf_token('property_filters') }}">
+                        {% endif %}
+
                         {% if searchTerm %}
                             <input type="hidden" name="search" value="{{ searchTerm }}">
                         {% endif %}
