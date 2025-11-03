@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>HouseController.php</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #ff79c6;}
+.s1 { color: #f8f8f2;}
+.s2 { color: #8be9fd;}
+.s3 { color: #737fff;}
+.s4 { color: #fff906;}
+.s5 { color: #f1fa8c;}
+.s6 { color: #36ffac;}
+.s7 { color: #b9bcd1;}
+.s8 { color: #98afff;}
+.s9 { color: #bd93f9;}
+</style>
+</head>
+<body bgcolor="#282a36">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HouseController.php</font>
+</center></td></tr></table>
+<pre><span class="s0">class </span><span class="s2">HouseController </span><span class="s0">extends </span><span class="s2">AbstractController</span>
+<span class="s3">{</span>
+    <span class="s1">#[</span><span class="s2">Route </span><span class="s4">(</span><span class="s5">'/house/all/{slug?}'</span><span class="s1">, </span><span class="s2">name</span><span class="s1">: </span><span class="s5">'app_house_all'</span><span class="s4">)</span><span class="s6">]</span>
+    <span class="s0">public function </span><span class="s2">all</span><span class="s4">(</span>
+        <span class="s1">?</span><span class="s2">string </span><span class="s7">$slug</span><span class="s1">,</span>
+        <span class="s2">Request </span><span class="s7">$request</span><span class="s1">,</span>
+        <span class="s2">PropertyRepository </span><span class="s7">$propertyRepository</span><span class="s1">,</span>
+        <span class="s2">CategoryRepository </span><span class="s7">$categoryRepository</span><span class="s1">,</span>
+        <span class="s2">LocationRepository </span><span class="s7">$locationRepository</span><span class="s1">,</span>
+        <span class="s2">WishlistRepository </span><span class="s7">$wishlistRepository</span><span class="s1">,</span>
+        <span class="s2">AuthenticationUtils </span><span class="s7">$authenticationUtils</span><span class="s1">,</span>
+        <span class="s2">RateLimiterFactory </span><span class="s7">$property_search_limiter_limiter</span><span class="s1">,</span>
+        <span class="s2">RateLimiterFactory </span><span class="s7">$property_filter_limiter_limiter</span><span class="s1">,</span>
+        <span class="s2">CsrfTokenManagerInterface </span><span class="s7">$csrfTokenManager</span><span class="s1">,</span>
+        <span class="s2">ValidatorInterface </span><span class="s7">$validator</span><span class="s1">,</span>
+    <span class="s4">)</span><span class="s1">:</span><span class="s2">Response</span>
+    <span class="s3">{</span>
+        <span class="s8">// CSRF Token</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">getUser</span><span class="s4">()) </span><span class="s3">{</span>
+            <span class="s0">if </span><span class="s4">(</span><span class="s1">!</span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">has</span><span class="s4">(</span><span class="s5">'_token'</span><span class="s4">)) </span><span class="s3">{</span>
+                <span class="s8">// Token fehlt komplett -&gt; blockieren</span>
+                <span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">addFlash</span><span class="s4">(</span><span class="s5">'error'</span><span class="s1">, </span><span class="s5">'Ungültige Anfrage (CSRF Token fehlt).'</span><span class="s4">)</span><span class="s1">;</span>
+                <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">redirectToRoute</span><span class="s4">(</span><span class="s5">'app_house_all'</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s3">}</span>
+
+            <span class="s7">$token </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'_token'</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s0">if</span><span class="s4">(</span><span class="s1">!</span><span class="s7">$csrfTokenManager</span><span class="s1">-&gt;</span><span class="s2">isTokenValid</span><span class="s4">(</span><span class="s0">new </span><span class="s2">CsrfToken</span><span class="s4">(</span><span class="s5">'property_filters'</span><span class="s1">, </span><span class="s7">$token</span><span class="s4">))) </span><span class="s3">{</span>
+                <span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">addFlash</span><span class="s4">(</span><span class="s5">'error'</span><span class="s1">, </span><span class="s5">'Ungültige Anfrage (CSRF Token ungültig).'</span><span class="s4">)</span><span class="s1">;</span>
+                <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">redirectToRoute</span><span class="s4">(</span><span class="s5">'app_house_all'</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s3">}</span>
+        <span class="s3">}</span>
+
+        <span class="s8">// Eingabeprüfung mit DTO und Validator</span>
+
+        <span class="s7">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s4">()</span><span class="s1">;</span>
+        <span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">search </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'search'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">preis </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'preis'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">town </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'town'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">region </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'region'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">country </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'country'</span><span class="s4">)</span><span class="s1">;</span>
+
+        <span class="s7">$errors </span><span class="s1">= </span><span class="s7">$validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s4">(</span><span class="s7">$dto</span><span class="s4">)</span><span class="s1">;</span>
+
+        <span class="s0">if</span><span class="s4">(</span><span class="s2">count</span><span class="s4">(</span><span class="s7">$errors</span><span class="s4">) </span><span class="s1">&gt; </span><span class="s9">0</span><span class="s4">) </span><span class="s3">{</span>
+            <span class="s0">foreach </span><span class="s4">(</span><span class="s7">$errors </span><span class="s0">as </span><span class="s7">$error</span><span class="s4">) </span><span class="s3">{</span>
+                <span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">addFlash</span><span class="s4">(</span><span class="s5">'error'</span><span class="s1">, </span><span class="s2">sprintf</span><span class="s4">(</span><span class="s5">'%s: %s'</span><span class="s1">, </span><span class="s7">$error</span><span class="s1">-&gt;</span><span class="s2">getPropertyPath</span><span class="s4">()</span><span class="s1">, </span><span class="s7">$error</span><span class="s1">-&gt;</span><span class="s2">getMessage</span><span class="s4">()))</span><span class="s1">;</span>
+            <span class="s3">}</span>
+
+            <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">redirectToRoute</span><span class="s4">(</span><span class="s5">'app_house_all'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s3">}</span>
+
+        <span class="s7">$selectedPreis </span><span class="s1">= </span><span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">preis</span><span class="s1">;</span>
+        <span class="s7">$selectedTown </span><span class="s1">= </span><span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">town</span><span class="s1">;</span>
+        <span class="s7">$selectedRegion </span><span class="s1">= </span><span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">region</span><span class="s1">;</span>
+        <span class="s7">$selectedCountry </span><span class="s1">= </span><span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">country</span><span class="s1">;</span>
+        <span class="s7">$searchTerm </span><span class="s1">= </span><span class="s7">$dto</span><span class="s1">-&gt;</span><span class="s2">search</span><span class="s1">;</span>
+
+        <span class="s7">$lastUsername </span><span class="s1">= </span><span class="s7">$authenticationUtils</span><span class="s1">-&gt;</span><span class="s2">getLastUsername</span><span class="s4">()</span><span class="s1">;</span>
+
+        <span class="s7">$location </span><span class="s1">= </span><span class="s7">$slug </span><span class="s1">? </span><span class="s2">u</span><span class="s4">(</span><span class="s2">str_replace</span><span class="s4">(</span><span class="s5">'-'</span><span class="s1">, </span><span class="s5">'_'</span><span class="s1">, </span><span class="s7">$slug</span><span class="s4">))</span><span class="s1">-&gt;</span><span class="s2">title</span><span class="s4">(</span><span class="s2">true</span><span class="s4">) </span><span class="s1">: </span><span class="s2">null</span><span class="s1">;</span>
+        <span class="s7">$category </span><span class="s1">= </span><span class="s7">$slug </span><span class="s1">? </span><span class="s7">$categoryRepository</span><span class="s1">-&gt;</span><span class="s2">findOneBy</span><span class="s4">(</span><span class="s6">[</span><span class="s5">'discription' </span><span class="s1">=&gt; </span><span class="s7">$slug</span><span class="s6">]</span><span class="s4">) </span><span class="s1">: </span><span class="s2">null</span><span class="s1">;</span>
+
+        <span class="s7">$selectedTown </span><span class="s1">=</span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'town'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$selectedRegion </span><span class="s1">=</span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'region'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$selectedCountry </span><span class="s1">=</span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'country'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$selectedPreis </span><span class="s1">=</span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'preis'</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s7">$searchTerm </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'search'</span><span class="s4">)</span><span class="s1">; </span><span class="s8">//für die Suche</span>
+
+        <span class="s8">//Rate Limiter für Filter-Anfragen</span>
+        <span class="s7">$hasAnyFilter </span><span class="s1">= </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'search'</span><span class="s4">)</span>
+            <span class="s1">|| </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'town'</span><span class="s4">)</span>
+            <span class="s1">|| </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'region'</span><span class="s4">)</span>
+            <span class="s1">|| </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'country'</span><span class="s4">)</span>
+            <span class="s1">|| </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">query</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s4">(</span><span class="s5">'preis'</span><span class="s4">)</span><span class="s1">;</span>
+
+        <span class="s0">if </span><span class="s4">(</span><span class="s7">$hasAnyFilter</span><span class="s4">) </span><span class="s3">{</span>
+            <span class="s7">$limiter </span><span class="s1">= </span><span class="s7">$property_filter_limiter_limiter</span><span class="s1">-&gt;</span><span class="s2">create</span><span class="s4">(</span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">getUser</span><span class="s4">()</span><span class="s1">?-&gt;</span><span class="s2">getID</span><span class="s4">() </span><span class="s1">?? </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">getClientIp</span><span class="s4">())</span><span class="s1">;</span>
+            <span class="s0">if</span><span class="s4">(</span><span class="s1">!</span><span class="s7">$limiter</span><span class="s1">-&gt;</span><span class="s2">consume</span><span class="s4">(</span><span class="s9">1</span><span class="s4">)</span><span class="s1">-&gt;</span><span class="s2">isAccepted</span><span class="s4">()) </span><span class="s3">{</span>
+                <span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">addFlash</span><span class="s4">(</span><span class="s5">'error'</span><span class="s1">,</span><span class="s5">'Zu viele Filter-Anfragen. Bitte warten Sie eine Minute.'</span><span class="s4">)</span><span class="s1">;</span>
+                <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">redirectToRoute</span><span class="s4">(</span><span class="s5">'app_house_all'</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s3">}</span>
+        <span class="s3">}</span>
+
+        <span class="s8">//Rate Limiter für Suchanfragen</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$searchTerm</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$limiter </span><span class="s1">= </span><span class="s7">$property_search_limiter_limiter</span><span class="s1">-&gt;</span><span class="s2">create</span><span class="s4">(</span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">getUser</span><span class="s4">()</span><span class="s1">?-&gt;</span><span class="s2">getId</span><span class="s4">() </span><span class="s1">?? </span><span class="s7">$request</span><span class="s1">-&gt;</span><span class="s2">getClientIp</span><span class="s4">())</span><span class="s1">;</span>
+            <span class="s7">$limit </span><span class="s1">= </span><span class="s7">$limiter</span><span class="s1">-&gt;</span><span class="s2">consume</span><span class="s4">(</span><span class="s9">1</span><span class="s4">)</span><span class="s1">;</span>
+
+            <span class="s0">if</span><span class="s4">(</span><span class="s1">!</span><span class="s7">$limit</span><span class="s1">-&gt;</span><span class="s2">isAccepted</span><span class="s4">())</span><span class="s3">{</span>
+                <span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">addFlash</span><span class="s4">(</span><span class="s5">'error'</span><span class="s1">, </span><span class="s5">'Zu viele Suchanfragen. Bitte warten Sie eine Minute'</span><span class="s4">)</span><span class="s1">;</span>
+                <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">redirectToRoute</span><span class="s4">(</span><span class="s5">'app_house_all'</span><span class="s1">,</span><span class="s6">[</span>
+                    <span class="s5">'slug' </span><span class="s1">=&gt; </span><span class="s7">$slug</span><span class="s1">,</span>
+                    <span class="s5">'town' </span><span class="s1">=&gt; </span><span class="s7">$selectedTown</span><span class="s1">,</span>
+                    <span class="s5">'region' </span><span class="s1">=&gt; </span><span class="s7">$selectedRegion</span><span class="s1">,</span>
+                    <span class="s5">'country' </span><span class="s1">=&gt; </span><span class="s7">$selectedCountry</span><span class="s1">,</span>
+                    <span class="s5">'preis' </span><span class="s1">=&gt; </span><span class="s7">$selectedPreis</span>
+                <span class="s6">]</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s3">}</span>
+        <span class="s3">}</span>
+
+        <span class="s7">$priceRanges </span><span class="s1">= </span><span class="s6">[</span>
+            <span class="s5">'0 - 100.000' </span><span class="s1">=&gt; </span><span class="s6">[</span><span class="s9">0</span><span class="s1">, </span><span class="s9">100000</span><span class="s6">]</span><span class="s1">,</span>
+            <span class="s5">'100.000 - 500.000' </span><span class="s1">=&gt; </span><span class="s6">[</span><span class="s9">100000</span><span class="s1">, </span><span class="s9">500000</span><span class="s6">]</span><span class="s1">,</span>
+            <span class="s5">'500.000 - 1.000.000' </span><span class="s1">=&gt; </span><span class="s6">[</span><span class="s9">500000</span><span class="s1">, </span><span class="s9">1000000</span><span class="s6">]</span><span class="s1">,</span>
+            <span class="s5">'1.000.000 - 2.500.000' </span><span class="s1">=&gt; </span><span class="s6">[</span><span class="s9">1000000</span><span class="s1">, </span><span class="s9">2500000</span><span class="s6">]</span><span class="s1">,</span>
+            <span class="s5">'2.500.000 - 50000000' </span><span class="s1">=&gt; </span><span class="s6">[</span><span class="s9">2500000</span><span class="s1">, </span><span class="s9">5000000</span><span class="s6">]</span><span class="s1">,</span>
+            <span class="s5">'5.000.000+'</span><span class="s1">=&gt;</span><span class="s6">[</span><span class="s9">5000000</span><span class="s1">, </span><span class="s2">null</span><span class="s6">]</span><span class="s1">,</span>
+        <span class="s6">]</span><span class="s1">;</span>
+
+        <span class="s7">$criteria </span><span class="s1">= </span><span class="s6">[]</span><span class="s1">;</span>
+
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$category</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'category'</span><span class="s6">] </span><span class="s1">= </span><span class="s7">$category</span><span class="s1">;</span>
+        <span class="s3">}</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$selectedTown</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'location_town'</span><span class="s6">] </span><span class="s1">= </span><span class="s7">$selectedTown</span><span class="s1">;</span>
+        <span class="s3">}</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$selectedRegion</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'region'</span><span class="s6">] </span><span class="s1">= </span><span class="s7">$selectedRegion</span><span class="s1">;</span>
+        <span class="s3">}</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$selectedCountry</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'country'</span><span class="s6">] </span><span class="s1">= </span><span class="s7">$selectedCountry</span><span class="s1">;</span>
+        <span class="s3">}</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$selectedPreis</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s0">list</span><span class="s4">(</span><span class="s7">$minPreis</span><span class="s1">, </span><span class="s7">$maxPreis</span><span class="s4">) </span><span class="s1">= </span><span class="s2">explode</span><span class="s4">(</span><span class="s5">'-'</span><span class="s1">, </span><span class="s7">$selectedPreis</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'preis'</span><span class="s6">] </span><span class="s1">= </span><span class="s6">[</span>
+                <span class="s5">'min' </span><span class="s1">=&gt; </span><span class="s7">$minPreis</span><span class="s1">,</span>
+                <span class="s5">'max' </span><span class="s1">=&gt; </span><span class="s7">$maxPreis</span>
+            <span class="s6">]</span><span class="s1">;</span>
+        <span class="s3">}</span>
+        <span class="s0">if</span><span class="s4">(</span><span class="s7">$searchTerm</span><span class="s4">)</span><span class="s3">{</span>
+            <span class="s7">$criteria</span><span class="s6">[</span><span class="s5">'search'</span><span class="s6">] </span><span class="s1">= </span><span class="s7">$searchTerm</span><span class="s1">;</span>
+        <span class="s3">}</span>
+
+        <span class="s7">$properties </span><span class="s1">= </span><span class="s7">$propertyRepository</span><span class="s1">-&gt;</span><span class="s2">findByFilters</span><span class="s4">(</span><span class="s7">$criteria</span><span class="s1">, </span><span class="s7">$selectedPreis</span><span class="s4">)</span><span class="s1">;</span>
+
+        <span class="s7">$towns </span><span class="s1">= </span><span class="s7">$locationRepository</span><span class="s1">-&gt;</span><span class="s2">findDistinctTowns</span><span class="s4">()</span><span class="s1">;</span>
+        <span class="s7">$regions </span><span class="s1">= </span><span class="s7">$locationRepository</span><span class="s1">-&gt;</span><span class="s2">findDistinctRegions</span><span class="s4">()</span><span class="s1">;</span>
+        <span class="s7">$countries </span><span class="s1">= </span><span class="s7">$locationRepository</span><span class="s1">-&gt;</span><span class="s2">findDistinctCountries</span><span class="s4">()</span><span class="s1">;</span>
+        <span class="s7">$preise </span><span class="s1">= </span><span class="s7">$propertyRepository</span><span class="s1">-&gt;</span><span class="s2">findDistinctPreise</span><span class="s4">()</span><span class="s1">;</span>
+
+        <span class="s7">$wishlistPropertyIds </span><span class="s1">= </span><span class="s6">[]</span><span class="s1">;</span>
+
+        <span class="s0">if </span><span class="s4">(</span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">getUser</span><span class="s4">())</span><span class="s3">{</span>
+            <span class="s7">$customer </span><span class="s1">= </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">getUser</span><span class="s4">()</span><span class="s1">-&gt;</span><span class="s2">getCustomer</span><span class="s4">()</span><span class="s1">;</span>
+            <span class="s7">$wishlistItems </span><span class="s1">= </span><span class="s7">$wishlistRepository</span><span class="s1">-&gt;</span><span class="s2">findBy</span><span class="s4">(</span><span class="s6">[</span><span class="s5">'customer' </span><span class="s1">=&gt; </span><span class="s7">$customer</span><span class="s6">]</span><span class="s4">)</span><span class="s1">;</span>
+            <span class="s7">$wishlistPropertyIds </span><span class="s1">= </span><span class="s2">array_map</span><span class="s4">(</span><span class="s0">fn</span><span class="s4">(</span><span class="s7">$item</span><span class="s4">)</span><span class="s1">=&gt;</span><span class="s7">$item</span><span class="s1">-&gt;</span><span class="s2">getProperty</span><span class="s4">()</span><span class="s1">-&gt;</span><span class="s2">getId</span><span class="s4">()</span><span class="s1">, </span><span class="s7">$wishlistItems</span><span class="s4">)</span><span class="s1">;</span>
+        <span class="s3">}</span>
+
+        <span class="s0">return </span><span class="s7">$this</span><span class="s1">-&gt;</span><span class="s2">render</span><span class="s4">(</span><span class="s5">'house/all.html.twig'</span><span class="s1">, </span><span class="s6">[</span>
+            <span class="s5">'properties' </span><span class="s1">=&gt; </span><span class="s7">$properties</span><span class="s1">,</span>
+            <span class="s5">'location' </span><span class="s1">=&gt; </span><span class="s7">$location</span><span class="s1">,</span>
+            <span class="s5">'category' </span><span class="s1">=&gt; </span><span class="s7">$category</span><span class="s1">,</span>
+            <span class="s5">'towns' </span><span class="s1">=&gt; </span><span class="s7">$towns</span><span class="s1">,</span>
+            <span class="s5">'regions' </span><span class="s1">=&gt; </span><span class="s7">$regions</span><span class="s1">,</span>
+            <span class="s5">'countries' </span><span class="s1">=&gt; </span><span class="s7">$countries</span><span class="s1">,</span>
+            <span class="s5">'preise' </span><span class="s1">=&gt; </span><span class="s7">$preise</span><span class="s1">,</span>
+            <span class="s5">'selectedTown' </span><span class="s1">=&gt; </span><span class="s7">$selectedTown</span><span class="s1">,</span>
+            <span class="s5">'selectedRegion' </span><span class="s1">=&gt; </span><span class="s7">$selectedRegion</span><span class="s1">,</span>
+            <span class="s5">'selectedCountry' </span><span class="s1">=&gt; </span><span class="s7">$selectedCountry</span><span class="s1">,</span>
+            <span class="s5">'selectedPreis' </span><span class="s1">=&gt; </span><span class="s7">$selectedPreis</span><span class="s1">,</span>
+            <span class="s5">'searchTerm' </span><span class="s1">=&gt; </span><span class="s7">$searchTerm</span><span class="s1">, </span><span class="s8">//search</span>
+            <span class="s5">'priceRanges' </span><span class="s1">=&gt; </span><span class="s7">$priceRanges</span><span class="s1">,</span>
+            <span class="s5">'wishlistPropertyIds' </span><span class="s1">=&gt; </span><span class="s7">$wishlistPropertyIds</span><span class="s1">,</span>
+            <span class="s5">'last_username' </span><span class="s1">=&gt; </span><span class="s7">$lastUsername</span><span class="s1">,</span>
+            <span class="s5">'selectedCategories' </span><span class="s1">=&gt; </span><span class="s7">$category </span><span class="s1">? </span><span class="s6">[</span><span class="s7">$category</span><span class="s1">-&gt;</span><span class="s2">getDiscription</span><span class="s4">()</span><span class="s6">] </span><span class="s1">: </span><span class="s6">[]</span><span class="s1">,</span>
+            <span class="s5">'selectedTowns' </span><span class="s1">=&gt; </span><span class="s7">$selectedTown </span><span class="s1">? </span><span class="s6">[</span><span class="s7">$selectedTown</span><span class="s6">] </span><span class="s1">: </span><span class="s6">[]</span><span class="s1">,</span>
+        <span class="s6">]</span><span class="s4">)</span><span class="s1">;</span>
+    <span class="s3">}</span></pre>
+</body>
+</html>

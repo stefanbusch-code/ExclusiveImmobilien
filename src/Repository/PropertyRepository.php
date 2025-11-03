@@ -8,17 +8,36 @@ use Doctrine\Persistence\ManagerRegistry;
 use function Doctrine\ORM\QueryBuilder;
 
 /**
+ * PropertyRepository - Datenbankzugriff für Immobilien-Entitäten
+ * Enthält spezielle Such- und Filterfunktionen für das Immobilienportfolio
+ * sowie Standard-Datenbankabfragen für Property-Entities.
+ *
  * @extends ServiceEntityRepository<Property>
+ *
+ *
  */
 class PropertyRepository extends ServiceEntityRepository
 {
+    /**
+     * Konstruktor - Initialisiert das repository
+     * @param ManagerRegistry $registry Doctrine-Kernkomponente zur Verwaltung von Datenbankzugriffen
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Property::class);
     }
 
-
-
+    /**
+     * Findet zufällige immobilien für die Startseite oder Empfehlungen
+     *
+     * Verwendet native SQL anstelle von QueryBuilder, wegen besserer Performance bei zufälliger Auswahl ->
+     * Über Doctrine -> lädt alle datensätze in PHP Speicher -> mischt diese -> wählt aus
+     * (z.B 100.000 Datensätze -> lädt er 100.000 Datensätze)
+     * über SQL -> Datenbank mischt lokal -> sendet nur gewünschte Anzahl an PHP -> viel weniger Datentransfer
+     *
+     * @param int $limit Maximale Anzahl der zurückgebenden Immobilien
+     * @return Property[] array von zufälligen Immobilien-Entitäten
+     */
     public function findRandomProperties(int $limit=3):array
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -41,8 +60,12 @@ class PropertyRepository extends ServiceEntityRepository
 
     }
 
-     /**
-     * @return Property[] Returns an array of Property objects
+    /**
+     * Findet alle Immobilien, sortiert nach Kategorie
+     *
+     * optionale Filterung nach spezifischer kategorie
+     *
+     * @return Property[] Array von Immobilien-entitäten, sortiert nach Kategorie
      */
     public function findAllOrderedByCategory(string $category = null): array
     {
@@ -60,6 +83,24 @@ class PropertyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Filtert Immobilien basierend auf komplexen Filterkriterien
+     *
+     * Unterstützt kombinierte Filterung nach Preis, Standort, Kategorie
+     * und Volltextsuche über mehrere Entitäten hinweg.
+     *
+     * @param array $criteria Assoziatives Array (Array mit benannten Schlüsseln) mit Filterkriterien
+     *      - 'preis': Array mit 'min' und 'max' Preisen
+     *      - 'location_town': Stadt für Filterung
+     *      - 'region': Region für Filterung
+     *      - 'country': Land für Filterung
+     *      - 'category': Kategorie für Filterung
+     *      - 'search': Suchbegriff für Volltextsuche
+     *
+     * @param string|null $preis zusätzlicher Preisparameter
+     *
+     * @return Property[] Array von gefilterten Immobilien-Entitäten
+     */
     public function findByFilters(array $criteria = [], ?string $preis = null):array
     {
         $qb = $this->createQueryBuilder('p')
@@ -70,6 +111,7 @@ class PropertyRepository extends ServiceEntityRepository
 
         $locationFields = ['location_town', 'region', 'country'];
 
+        // Preisbereich-Filterung
         foreach ($criteria as $field => $value) {
             if ($field == 'preis' && is_array($value)) {
                 $minPreis = $value['min'] ?? null;
@@ -86,6 +128,7 @@ class PropertyRepository extends ServiceEntityRepository
             }
         }
 
+        // Stadt-Filter
         if (!empty($criteria['location_town'])) {
             $qb->andWhere('l.location_town IN (:town)')
                 ->setParameter('town', $criteria['location_town']);
@@ -109,7 +152,7 @@ class PropertyRepository extends ServiceEntityRepository
                 ->setParameter('category', $criteria['category']);
         }
 
-        // Such-Filter
+        // Volltextsuche über mehrere Felder
         if(!empty($criteria['search'])){
             $searchTerm = $criteria['search'];
             $qb->andWhere(
@@ -125,10 +168,14 @@ class PropertyRepository extends ServiceEntityRepository
                 ->setParameter('search', '%'.$searchTerm.'%');
         }
 
-
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * findet alle distinct (eindeutige Werte-ohne Duplikate) Preiswerte für Filter-Dropdown
+     *
+     * @return array Array von distinct Preisen, aufsteigend sortiert
+     */
     public function findDistinctPreise():array
     {
         return $this->createQueryBuilder('p')
@@ -139,6 +186,11 @@ class PropertyRepository extends ServiceEntityRepository
             ->getSingleColumnResult();
     }
 
+    /**
+     * findet alle distinct (eindeutige Werte-ohne Duplikate) Länder für Filter-Dropdown
+     *
+     * @return array
+     */
     public function findDistinctCountries(): array
     {
         return $this->createQueryBuilder('p')
@@ -149,6 +201,11 @@ class PropertyRepository extends ServiceEntityRepository
             ->getSingleColumnResult();
     }
 
+    /**
+     * Findet alle distinct (eindeutige Werte-ohne Duplikate) Städte für Filter-Dropdown
+     *
+     * @return array Array von distinct Städtenamen, alphabetisch sortiert
+     */
     public function findDistinctCities(): array
     {
         return $this->createQueryBuilder('p')

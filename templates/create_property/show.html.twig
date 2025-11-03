@@ -1,84 +1,83 @@
+{#
+show.html.twig - Detailtemplate für einzelne Immobilien
+
+Zeigt alle Informationen einer spezifischen Immobilie in einer
+übersichtlichen Detailansicht. Enthält vereinfachte Navigation
+mit "Zurück"- und "Kontakt"-Buttons ohne Merklisten-Funktionalität.
+#}
+
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <br>
+    {# Hauptcontainer mit Top-Margin für Fixed-Navigation #}
     <div class="container" style="margin-top: 100px;">
 
+        {# Hero Section mit Immobilientitel #}
         <div class="max-w-screen-xl mx-auto p-4 text-center">
-            <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"> <span class="text-blue-600 dark:text-blue-500">{{property.propertyTitle}}</span></h1>
+            <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl
+            dark:text-white">
+                {# Hervorgehobener Immobilientitel #}
+                <span class="text-blue-600 dark:text-blue-500">{{property.propertyTitle}}</span></h1>
         </div>
 
+        {# Hauptbereich der Detailansicht #}
         <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
             <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
                 <div class="mx-auto max-w-5xl">
 
                     <div class="my-8 xl:mb-16 xl:mt-12">
-                        <img class="w-full dark:hidden rounded-lg" src="{{ asset('Bilder/' ~ property.bild) }}" alt="" />
-
+                        <img class="w-full dark:hidden rounded-lg" src="{{ asset('Bilder/' ~ property.bild) }}" alt=""/>
                     </div>
 
+                    {# Detailinformationen als Definition List #}
                     <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                        {# Immobilienbeschreibung #}
                         <div class="flex flex-col pb-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Immobilien Beschreibung</dt>
                             <dd class="text-lg font-semibold">{{property.propertyDiscription}}</dd>
                         </div>
+                        {# Kategorie #}
                         <div class="flex flex-col py-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Kategorie</dt>
                             <dd class="text-lg font-semibold">{{property.category}}</dd>
                         </div>
+                        {# Land #}
                         <div class="flex flex-col pt-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land</dt>
                             <dd class="text-lg font-semibold">{{ property.location.country }}</dd>
                         </div>
+                        {# Bundesland/Region #}
                         <div class="flex flex-col pt-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Bundesland</dt>
                             <dd class="text-lg font-semibold">{{ property.location.region }}</dd>
                         </div>
-                        <div class="flex flex-col pt-3">
-                            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Land</dt>
-                            <dd class="text-lg font-semibold">{{ property.location.country }}</dd>
-                        </div>
+                        {# PLZ und Stadt #}
                         <div class="flex flex-col pt-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">PLZ/Stadt</dt>
-                            <dd class="text-lg font-semibold">{{property.location.locationZipcode}} {{property.location.locationTown}}</dd>
+                            <dd class="text-lg font-semibold">
+                                {{property.location.locationZipcode}} {{property.location.locationTown}}</dd>
                         </div>
+                        {# Straße und Hausnummer #}
                         <div class="flex flex-col pt-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Adresse</dt>
-                            <dd class="text-lg font-semibold">{{property.location.locationStreet}} {{property.location.locationStreetnumber}}</dd>
+                            <dd class="text-lg font-semibold">
+                                {{property.location.locationStreet}} {{property.location.locationStreetnumber}}</dd>
                         </div>
+                        {# Preis - hervorgehoben in blau #}
                         <div class="flex flex-col pt-3">
                             <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Preis</dt>
-                            <dd class="text-lg font-semibold text-blue-600 dark:text-blue-500">{{ property.preis|number_format(0, ',', '.') }}</dd>
+                            <dd class="text-lg font-semibold text-blue-600 dark:text-blue-500">
+                                {# Preis mit deutscher Zahlformatierung (1.000.000) #}
+                                {{ property.preis|number_format(0, ',', '.') }}</dd>
                         </div>
                     </dl>
 
                     <br>
 
+                    {# Action-Buttons für Benutzerinteraktionen #}
                     <div class="mt-auto flex justify-between space-x-2">
-                        {% if is_granted('ROLE_CUSTOMER') and not is_granted('ROLE_EMPLOYEE')%}
 
-                            {% if wishlistPropertyIds is defined and property.id in wishlistPropertyIds %}
-                                <a href="{{ path('app_wishlist_toggle', {'id': property.id}) }}"
-                                   class="flex-1 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                                        disabled>
-                                    Gemerkt
-                                </a>
-                            {% else %}
-                                <a href="{{ path('app_wishlist_toggle', {'id': property.id}) }}"
-                                   class="flex-1 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                    Merken
-                                </a>
-                            {% endif %}
-
-                            <a href="{{ path('app_contact') }}"
-                               class="flex-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                Kontakt aufnehmen
-                            </a>
-                        {% endif %}
-
-                    </div>
-
-                    <div class="mt-4">
                         <a href="{{ path('app_house_all', {
                             slug: category ? category : null
                         }) ~ '?' ~
@@ -88,9 +87,20 @@
                         '&categories=' ~ (selectedCategories|join(',')) ~
                         '&country=' ~ (selectedCountries|join(','))
                         }}"
-                           class="inline-block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                           class="flex-1 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none
+                           focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600
+                           dark:hover:bg-red-700 dark:focus:ring-red-800">
                             Zurück zu den Suchergebnissen
                         </a>
+
+                        {# Kontaktaufnahme-Button #}
+                        <a href="{{ path('app_contact') }}"
+                           class="flex-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none
+                           focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600
+                           dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Kontakt aufnehmen
+                        </a>
+
                     </div>
 
                 </div>

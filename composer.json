@@ -49,6 +49,7 @@
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
+            "phpdocumentor/shim": true,
             "symfony/flex": true,
             "symfony/runtime": true
         },
@@ -95,6 +96,8 @@
         }
     },
     "require-dev": {
+        "phpdocumentor/shim": "^3.8",
+        "phpunit/phpunit": "^12.3",
         "symfony/debug-bundle": "6.4.*",
         "symfony/maker-bundle": "^1.64",
         "symfony/stopwatch": "6.4.*",

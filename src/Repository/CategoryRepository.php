@@ -7,10 +7,20 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * CategoryRepository - Datenbankzugriff für Kategorie-Entitäten
+ *
+ * Verwaltet die Datenbankoperationen für Immobilien-Kategorien
+ * wie "Apartments zum Kaufen", "Häuser zum Mieten" etc.
+ *
  * @extends ServiceEntityRepository<Category>
  */
 class CategoryRepository extends ServiceEntityRepository
 {
+    /**
+     * Konstruktor - Initialisiert das Repository für Category-Entitäten
+     *
+     * @param ManagerRegistry $registry Doctrine Manager Registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
