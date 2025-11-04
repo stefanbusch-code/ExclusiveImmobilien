@@ -15,9 +15,37 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use function Symfony\Component\String\u;
+use App\Dto\PropertyFilterDto;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * HouseController - steuert die Immobilien-Suche und Filterfunktionen
+ *
+ * Verantwortlich für die Darstellung der Immobilien-Übersicht,
+ * Verarbeitung von Suchanfragen und Filterung sowie die Detailansicht.
+ */
 class HouseController extends AbstractController
 {
+    /**
+     * Zeigt alle Immobilien mit Filter- und Suchfunktionen an
+     *
+     * Verarbeitet Suchparameter, validiert Eingaben, wendet Filter an
+     * und zeigt die Ergebnisse in einer Grid-basierten Übersicht.
+     *
+     * @param string|null $slug kategorie-Slug für vorgefilterte Ansicht (z.B. 'Apartments-zum-kaufen')
+     * @param Request $request HTTP Request mit Suchparameter
+     * @param PropertyRepository $propertyRepository Repository für Immobilien-Datenbankzugriffe
+     * @param CategoryRepository $categoryRepository Repository für Category-Datenbankzugriffe
+     * @param LocationRepository $locationRepository Repository für Standort-Datenbankzugriffe
+     * @param WishlistRepository $wishlistRepository Repository für Merklisten-Funktionalität
+     * @param AuthenticationUtils $authenticationUtils Zur Authentifizierungs-Information
+     * @param RateLimiterFactory $property_search_limiter_limiter Zugriffsanfragenbegrenzung für Suchfunktion
+     * @param RateLimiterFactory $property_filter_limiter_limiter Zugriffsanfragenbegrenzung für Filterfunktion
+     * @param CsrfTokenManagerInterface $csrfTokenManager Schutz vor manipulierten Formular-Absendungen (CSRF-Schutz)
+     * @param ValidatorInterface $validator Validator für Eingabevalidierung
+     * @return Response gerendertes Twig Template mit Immobilien-Daten
+     */
+
     #[Route ('/house/all/{slug?}', name: 'app_house_all')]
     public function all(
         ?string $slug,
@@ -29,19 +57,55 @@ class HouseController extends AbstractController
         AuthenticationUtils $authenticationUtils,
         RateLimiterFactory $property_search_limiter_limiter,
         RateLimiterFactory $property_filter_limiter_limiter,
-        CsrfTokenManagerInterface $csrfTokenManager
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ValidatorInterface $validator,
     ):Response
     {
-        // CSRF Token
-        if($request->query->has('_token') && $this->getUser()) {
+        // CSRF Token Validation für authentifizierte Benutzer
+
+        if($this->getUser()) {
+            if (!$request->query->has('_token')) {
+                // Token fehlt komplett -> blockieren
+                $this->addFlash('error', 'Ungültige Anfrage (CSRF Token fehlt).');
+                return $this->redirectToRoute('app_house_all');
+            }
+
             $token = $request->query->get('_token');
             if(!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
-                $this->addFlash('error', 'Ungültige Anfrage');
+                $this->addFlash('error', 'Ungültige Anfrage (CSRF Token ungültig).');
                 return $this->redirectToRoute('app_house_all');
             }
         }
 
+        // Eingabeprüfung mit DTO und Validator
+
+        $dto = new PropertyFilterDto();
+        $dto->search = $request->query->get('search');
+        $dto->preis = $request->query->get('preis');
+        $dto->town = $request->query->get('town');
+        $dto->region = $request->query->get('region');
+        $dto->country = $request->query->get('country');
+
+        $errors = $validator->validate($dto);
+
+        if(count($errors) > 0) {
+            foreach ($errors as $error) {
+                $this->addFlash('error', sprintf('%s: %s', $error->getPropertyPath(), $error->getMessage()));
+            }
+
+            return $this->redirectToRoute('app_house_all');
+        }
+
+        //Vorbereitung der Parameter für Template-Übergabe
+        $selectedPreis = $dto->preis;
+        $selectedTown = $dto->town;
+        $selectedRegion = $dto->region;
+        $selectedCountry = $dto->country;
+        $searchTerm = $dto->search;
+
         $lastUsername = $authenticationUtils->getLastUsername();
+
+        // Kategorie und Standort-Informationen aus slug ermitteln
 
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
         $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
@@ -60,7 +124,7 @@ class HouseController extends AbstractController
             || $request->query->get('preis');
 
         if ($hasAnyFilter) {
-            $limiter = $property_search_limiter_limiter->create($this->getUser()?->getID() ?? $request->getClientIp());
+            $limiter = $property_filter_limiter_limiter->create($this->getUser()?->getID() ?? $request->getClientIp());
             if(!$limiter->consume(1)->isAccepted()) {
                 $this->addFlash('error','Zu viele Filter-Anfragen. Bitte warten Sie eine Minute.');
                 return $this->redirectToRoute('app_house_all');
@@ -84,6 +148,7 @@ class HouseController extends AbstractController
             }
         }
 
+        // Preisbereichsdefinition für Dropdown-Menü
         $priceRanges = [
             '0 - 100.000' => [0, 100000],
             '100.000 - 500.000' => [100000, 500000],
@@ -93,6 +158,7 @@ class HouseController extends AbstractController
             '5.000.000+'=>[5000000, null],
         ];
 
+        // Zusammenstellung der Filterkriterien für repository-Abfragen
         $criteria = [];
 
         if($category){
@@ -118,6 +184,7 @@ class HouseController extends AbstractController
             $criteria['search'] = $searchTerm;
         }
 
+        // Immobilien mit angewendeten Filter abrufen
         $properties = $propertyRepository->findByFilters($criteria, $selectedPreis);
 
         $towns = $locationRepository->findDistinctTowns();
@@ -125,6 +192,7 @@ class HouseController extends AbstractController
         $countries = $locationRepository->findDistinctCountries();
         $preise = $propertyRepository->findDistinctPreise();
 
+        //Merklisten-IDs für authentifizierte Benutzer laden
         $wishlistPropertyIds = [];
 
         if ($this->getUser()){
@@ -133,6 +201,7 @@ class HouseController extends AbstractController
             $wishlistPropertyIds = array_map(fn($item)=>$item->getProperty()->getId(), $wishlistItems);
         }
 
+        // Template mit allen Daten rendern
         return $this->render('house/all.html.twig', [
             'properties' => $properties,
             'location' => $location,
