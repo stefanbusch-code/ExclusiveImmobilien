@@ -1,0 +1,69 @@
+[33ma6fb758[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster_flowbite[m[33m)[m UnitTests hinzugefügt und laufen lassen. Alles funktioniert
+[33ma38ef7c[m Merken Buttons entfernt für das Projekt Entwicklerdokumentation hinzugefügt, benötige ich für die Projektarbeit UnitTest ordner hinzugefügt und PropertyRepositoryTest.php erstellt
+[33md4d022b[m mit Hilfe einer DTO Klasse und dem Validator mehr sicherheit geschaffen beim Filtern und Suchen
+[33m5b0f9a9[m Limits auch für Filter eingebunden
+[33m8fe179e[m CSRF Token für Fiter und Suche hinzugefügt
+[33mc7bfdac[m Rate_Limiter hinzugefügt
+[33mb36487a[m suchfunktion  als layout eingefügt, noch keine Funktion
+[33m69c0d59[m ZurückButtoon auf der Show Seite bringt dich jetzt zurück zu der Gefilterten Immobilien seite
+[33mafdbf5c[m Filterfunktion geht wieder, variablennamen angepasst zzurück von der Show seite auf die All seite mit immernoch gesetzten Filtern
+[33me3b886f[m Filterfunktion geht wieder, variablennamen angepasst
+[33mf421068[m Alle Immobilien Seite den Zugriffsschutz entfernt ist wieder öffentlich
+[33m6dead55[m Neuer Branch für Projektarbeit
+[33m4932876[m[33m ([m[1;31morigin/master_flowbite[m[33m)[m Anpassung optischer und design technischer Elemente in ALLE IMMOBILIEN
+[33m7a2a6a7[m "fehler beim Upload und laden von Bildern behoben, jetzt kann ich auch bilder beim editieren ersetzen
+[33m8608c05[m "2FA umgewandelt in Flowbite und optik verbessert, zudem den QR Code integriert in die Seite ohne extra seite"
+[33m7dfe600[m Immobilien können editiert werden und das auf Flowbite umgewandelt bilder bisher noch nicht
+[33mc4cfe6c[m Mitarbeiter können an neue Mitarbeiter einen Link versenden um sich zu registrieren und da auf Flowbite umgewandelt
+[33m2dfc857[m Mitgliederbereich meine Daten geändert und auf Flowbite umgewandelt
+[33mc39eff1[m show seite fertig immobilien bearbeiten fertig wishlist fertig mitarbeiter meine daten fertig employee registrierungs seite fertig immobilien anlegen seite fertig merken und entmerken soweit funktionstüchtig löschen und anlegen von immobilien geht jetzt alles in Flowbite umgewandelt
+[33m113244f[m pagination raus genommen
+[33m09c7608[m Objekte anlegen Seite umgestellt auf Flowbite Filter integriert und zurücksetzen funktion eingepflegt
+[33m2113f36[m Daten ändern umgestellt auf Flowbite
+[33m11b4f7b[m Kontakt und Daten umgestellt auf Flowbite
+[33m60e0466[m Merkliste auf Flowbite umgestellt
+[33mad9623e[m Passwort vergessen und 2 Faktor eingabe auf Flowbite umgestellt
+[33m85ae9fb[m Passwort ändern auf Flowbite umgestellt
+[33mca14334[m alle immobilien, home page anmeleden, registrieren, passwort vergessen auf Flowbite umgestellt
+[33m746998e[m Footer und Navbar umgestellt auf Flowbite
+[33m2344e96[m Umstellung auf Flowbite Navbar neu
+[33m28d4957[m[33m ([m[1;31morigin/master_ddev[m[33m, [m[1;31morigin/backup_master_ddev[m[33m)[m 2 fa angepasst und überflüssigen Code gelöscht
+[33md6f11a6[m[33m ([m[1;32mmaster_ddev[m[33m)[m 2 fa implementiert, dabei app funktioniert email noch nicht, da bei der code verifizierung der code nicht genommen wird und keine weiterleitung statt findet.
+[33mef10444[m Fehler behoben
+[33m46b4a54[m Fehler behoben
+[33m6983605[m auf ddev umgestellt
+[33m320142d[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m noch weitere Fehler behoben
+[33me6cce25[m 2 Faktor Authentifizierung code eingabe page hinzugefügt und layout angepasst
+[33meff4972[m 2 Faktor Authentifizierung hinzugefügt
+[33m2828380[m benutzer nicht verifiziert meldung hinzugefügt
+[33m85775f8[m kleinen Fehler beim Login behoben und login Throttling implementiert
+[33m4ddbf64[m Wieder neu leider verlust von email verifikation und 2 factor Authentication
+[33me1524db[m Passwort ändern hinzugefügt Passwort vergessen funktion hinzugefügt
+[33me11ea20[m Kontaktformular eingebunden mit Mailer und anbindung an Mailtrap kontaktformular Mail Css angepasst
+[33mf1cd6f5[m Datenanzeige Mitarbeiter erstellt Navbar Anpassung Registrierung öffentlich nur für Kunde und Mitarbeiter können im Login neue Mitarbeiter registrieren optische Anpassung als card für "Meine Daten" mit Daten ändern Button
+[33m2201cdd[m layout von all und merkliste mit bootsstrap card angepasst
+[33m2749c89[m login und registrierung angepasst daten editieren und ansehen für customer gemacht merkliste angepasst und optisch verbssert in registrierungsformular -> bereits kunde zum einloggen hinterlegt in loginformular -> kein kunde jetzt registrieren hinterlegt
+[33m920a78c[m alles alte zu Customer und Employee gelöscht
+[33m941664f[m alles alte zu Customer und Employee gelöscht
+[33m07a0858[m Registration und Login neu über USER Link bereits in der base.html hinterlegt und angepasst
+[33m7a8fba2[m[33m ([m[1;31morigin/Status-5.5[m[33m)[m Merkliste erstellt Meine Daten anzeigen und editieren hinzugefügt
+[33me4bfcf8[m Mitarbeiter login und kunden login hinzugefügt, Kunde wird bisher eingeloggt, zumindest sieht man das nur in der anmelde seite alle anderen seiten sind auch laut profiler nicht angemeldet
+[33m6b2a6c3[m Filter auf der All Seite hinzugefügt als Dropdown und optisch angepasst
+[33mc377122[m Menü geändert Menü angepasst Menü funktionsfähig gemacht
+[33m29f5a47[m kleine anpassungen von gestern Abend
+[33m045cef4[m Speichern Button berichtigt und farbe auf Grün gesetzt
+[33m4767478[m Filter funktion implementiert und layout in all.html.twig angepasst
+[33m03dfac5[m category hinzugefügt und überall hinterlegt
+[33m2d00d0e[m Form fertig
+[33m6568bea[m Adding Webpack Encore
+[33mef23d2d[m Look mom! A real app
+[33m7953ee4[m Form fertig
+[33m918b726[m Form fertig
+[33md54636d[m Form fertig
+[33mb21db48[m datenbank erstellt und versucht erste Daten hochzuladen
+[33mb643f37[m datenbank erstellt und versucht erste Daten hochzuladen
+[33maff9e49[m datenbank erstellt und versucht erste Daten hochzuladen
+[33me6e83c1[m installing docker
+[33m4c2d146[m installing docker
+[33mcfb68eb[m first changes
+[33m43b32ef[m Initial commit
