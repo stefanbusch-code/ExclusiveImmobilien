@@ -105,7 +105,7 @@ class HouseController extends AbstractController
 
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        // Kategorie und Standort-Inforationen aus slug ermitteln
+        // Kategorie und Standort-Informationen aus slug ermitteln
 
         $location = $slug ? u(str_replace('-', '_', $slug))->title(true) : null;
         $category = $slug ? $categoryRepository->findOneBy(['discription' => $slug]) : null;
