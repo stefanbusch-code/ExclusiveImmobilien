@@ -3,29 +3,31 @@
 <title>PropertyFilterDtoTest.php</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
-.s0 { color: #0033b3;}
-.s1 { color: #080808;}
-.s2 { color: #000000;}
-.s3 { color: #8c8c8c; font-style: italic;}
-.s4 { color: #8c8c8c; font-style: italic;}
-.s5 { color: #660000;}
-.s6 { color: #067d17;}
-.s7 { color: #1750eb;}
+.s0 { color: #ff79c6;}
+.s1 { color: #f8f8f2;}
+.s2 { color: #8be9fd;}
+.s3 { color: #98afff;}
+.s4 { color: #737fff;}
+.s5 { color: #b9bcd1;}
+.s6 { color: #fff906;}
+.s7 { color: #f1fa8c;}
+.s8 { color: #bd93f9;}
+.s9 { color: #36ffac;}
 </style>
 </head>
-<body bgcolor="#ffffff">
-<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<body bgcolor="#282a36">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
 <tr><td><center>
 <font face="Arial, Helvetica" color="#000000">
 PropertyFilterDtoTest.php</font>
 </center></td></tr></table>
 <pre><span class="s0">&lt;?php</span>
 
-<span class="s0">namespace </span>App<span class="s1">\</span>Tests<span class="s1">\</span>Unit<span class="s1">\</span>Dto<span class="s1">;</span>
+<span class="s0">namespace </span><span class="s2">App</span><span class="s1">\</span><span class="s2">Tests</span><span class="s1">\</span><span class="s2">Unit</span><span class="s1">\</span><span class="s2">Dto</span><span class="s1">;</span>
 
-<span class="s0">use </span>App<span class="s1">\</span>Dto<span class="s1">\</span>PropertyFilterDto<span class="s1">;</span>
-<span class="s0">use </span>Symfony<span class="s1">\</span>Bundle<span class="s1">\</span>FrameworkBundle<span class="s1">\</span>Test<span class="s1">\</span>KernelTestCase<span class="s1">;</span>
-<span class="s0">use </span>Symfony<span class="s1">\</span>Component<span class="s1">\</span>Validator<span class="s1">\</span>Validator<span class="s1">\</span>ValidatorInterface<span class="s1">;</span>
+<span class="s0">use </span><span class="s2">App</span><span class="s1">\</span><span class="s2">Dto</span><span class="s1">\</span><span class="s2">PropertyFilterDto</span><span class="s1">;</span>
+<span class="s0">use </span><span class="s2">Symfony</span><span class="s1">\</span><span class="s2">Bundle</span><span class="s1">\</span><span class="s2">FrameworkBundle</span><span class="s1">\</span><span class="s2">Test</span><span class="s1">\</span><span class="s2">KernelTestCase</span><span class="s1">;</span>
+<span class="s0">use </span><span class="s2">Symfony</span><span class="s1">\</span><span class="s2">Component</span><span class="s1">\</span><span class="s2">Validator</span><span class="s1">\</span><span class="s2">Validator</span><span class="s1">\</span><span class="s2">ValidatorInterface</span><span class="s1">;</span>
 
 <span class="s3">/**</span>
  <span class="s3">* PropertyFilterDtoTest - Unit Tests für das PropertyFilter Data Transfer Object</span>
@@ -34,28 +36,28 @@ PropertyFilterDtoTest.php</font>
  <span class="s3">* Stellt sicher, dass die Eingabevalidierung korrekt funktioniert</span>
  <span class="s3">* und Sicherheitsmechanismen gegen XSS und zu lange Eingaben greifen.</span>
  <span class="s3">*</span>
- <span class="s3">* </span><span class="s4">@package </span><span class="s3">App\Tests\Unit\Dto</span>
+ <span class="s3">* </span><span class="s0">@package </span><span class="s3">App\Tests\Unit\Dto</span>
  <span class="s3">*/</span>
-<span class="s0">class </span>PropertyFilterDtoTest <span class="s0">extends </span>KernelTestCase
-<span class="s1">{</span>
+<span class="s0">class </span><span class="s2">PropertyFilterDtoTest </span><span class="s0">extends </span><span class="s2">KernelTestCase</span>
+<span class="s4">{</span>
     <span class="s3">/**</span>
      <span class="s3">* Validator-Instanz für die Überprüfung der DTO-Validierung</span>
      <span class="s3">* Testet die Symfony Validation Constraints</span>
      <span class="s3">*/</span>
-    <span class="s0">private </span><span class="s1">?</span>ValidatorInterface <span class="s5">$validator</span><span class="s1">;</span>
+    <span class="s0">private </span><span class="s1">?</span><span class="s2">ValidatorInterface </span><span class="s5">$validator</span><span class="s1">;</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Setup-Methode - Wird vor jedem Test ausgeführt</span>
      <span class="s3">* Initialisiert die Testumgebung und den Validator</span>
      <span class="s3">*/</span>
-    <span class="s0">protected function </span>setUp<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">protected function </span><span class="s2">setUp</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// Symfony Kernel starten für Container-Zugriff</span>
-        self<span class="s1">::</span>bootKernel<span class="s1">();</span>
+        <span class="s2">self</span><span class="s1">::</span><span class="s2">bootKernel</span><span class="s6">()</span><span class="s1">;</span>
 
         <span class="s3">// Validator aus Dependency Injection Container holen</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>validator <span class="s1">= </span>self<span class="s1">::</span>getContainer<span class="s1">()-&gt;</span>get<span class="s1">(</span>ValidatorInterface<span class="s1">::</span><span class="s0">class</span><span class="s1">);</span>
-    <span class="s1">}</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator </span><span class="s1">= </span><span class="s2">self</span><span class="s1">::</span><span class="s2">getContainer</span><span class="s6">()</span><span class="s1">-&gt;</span><span class="s2">get</span><span class="s6">(</span><span class="s2">ValidatorInterface</span><span class="s1">::</span><span class="s0">class</span><span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Testet ein gültiges PropertyFilterDto mit korrekten Daten</span>
@@ -68,32 +70,32 @@ PropertyFilterDtoTest.php</font>
      <span class="s3">* 2. Führt Validierung durch</span>
      <span class="s3">* 3. Überprüft dass keine Fehler auftreten</span>
      <span class="s3">*/</span>
-    <span class="s0">public function </span>testValidDto<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">public function </span><span class="s2">testValidDto</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// ===== ARRANGE Phase =====</span>
 
         <span class="s3">// DTO mit gültigen Testdaten erstellen</span>
-        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span>PropertyFilterDto<span class="s1">();</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>search <span class="s1">= </span><span class="s6">'Berlin Apartment'</span><span class="s1">;</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>preis <span class="s1">= </span><span class="s6">'100000-500000'</span><span class="s1">;</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>town <span class="s1">= </span><span class="s6">'Berlin'</span><span class="s1">;</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>region <span class="s1">= </span><span class="s6">'Berlin'</span><span class="s1">;</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>country <span class="s1">= </span><span class="s6">'Deutschland'</span><span class="s1">;</span>
+        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s6">()</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">search </span><span class="s1">= </span><span class="s7">'Berlin Apartment'</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">preis </span><span class="s1">= </span><span class="s7">'100000-500000'</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">town </span><span class="s1">= </span><span class="s7">'Berlin'</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">region </span><span class="s1">= </span><span class="s7">'Berlin'</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">country </span><span class="s1">= </span><span class="s7">'Deutschland'</span><span class="s1">;</span>
 
         <span class="s3">// ===== ACT Phase =====</span>
 
         <span class="s3">// Validierung durchführen</span>
-        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span>validator<span class="s1">-&gt;</span>validate<span class="s1">(</span><span class="s5">$dto</span><span class="s1">);</span>
+        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s6">(</span><span class="s5">$dto</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ASSERT Phase =====</span>
 
         <span class="s3">// Test: Es sollten keine Validierungsfehler auftreten</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertCount<span class="s1">(</span>
-            <span class="s7">0</span><span class="s1">,</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertCount</span><span class="s6">(</span>
+            <span class="s8">0</span><span class="s1">,</span>
             <span class="s5">$errors</span><span class="s1">,</span>
-            <span class="s6">'DTO mit gültigen Daten sollte keine Validierungsfehler haben'</span>
-        <span class="s1">);</span>
-    <span class="s1">}</span>
+            <span class="s7">'DTO mit gültigen Daten sollte keine Validierungsfehler haben'</span>
+        <span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Testet die Längenvalidierung für Suchbegriffe</span>
@@ -106,41 +108,41 @@ PropertyFilterDtoTest.php</font>
      <span class="s3">* 2. Führt Validierung durch</span>
      <span class="s3">* 3. Überprüft dass Fehler auftreten</span>
      <span class="s3">*/</span>
-    <span class="s0">public function </span>testSearchTermTooLong<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">public function </span><span class="s2">testSearchTermTooLong</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// ===== ARRANGE Phase =====</span>
 
         <span class="s3">// DTO mit zu langem Suchbegriff erstellen (101 Zeichen)</span>
-        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span>PropertyFilterDto<span class="s1">();</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>search <span class="s1">= </span>str_repeat<span class="s1">(</span><span class="s6">'a'</span><span class="s1">, </span><span class="s7">101</span><span class="s1">);</span>
+        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s6">()</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">search </span><span class="s1">= </span><span class="s2">str_repeat</span><span class="s6">(</span><span class="s7">'a'</span><span class="s1">, </span><span class="s8">101</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ACT Phase =====</span>
 
         <span class="s3">// Validierung durchführen</span>
-        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span>validator<span class="s1">-&gt;</span>validate<span class="s1">(</span><span class="s5">$dto</span><span class="s1">);</span>
+        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s6">(</span><span class="s5">$dto</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ASSERT Phase =====</span>
 
         <span class="s3">// Test: Es sollten Validierungsfehler auftreten</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertGreaterThan<span class="s1">(</span>
-            <span class="s7">0</span><span class="s1">,</span>
-            count<span class="s1">(</span><span class="s5">$errors</span><span class="s1">),</span>
-            <span class="s6">'Suchbegriff mit 101 Zeichen sollte Validierungsfehler verursachen'</span>
-        <span class="s1">);</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertGreaterThan</span><span class="s6">(</span>
+            <span class="s8">0</span><span class="s1">,</span>
+            <span class="s2">count</span><span class="s6">(</span><span class="s5">$errors</span><span class="s6">)</span><span class="s1">,</span>
+            <span class="s7">'Suchbegriff mit 101 Zeichen sollte Validierungsfehler verursachen'</span>
+        <span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// Fehlermeldungen sammeln für detaillierte Prüfung</span>
-        <span class="s5">$errorMessages </span><span class="s1">= [];</span>
-        <span class="s0">foreach </span><span class="s1">(</span><span class="s5">$errors </span><span class="s0">as </span><span class="s5">$error</span><span class="s1">) {</span>
-            <span class="s5">$errorMessages</span><span class="s1">[] = </span><span class="s5">$error</span><span class="s1">-&gt;</span>getMessage<span class="s1">();</span>
-        <span class="s1">}</span>
+        <span class="s5">$errorMessages </span><span class="s1">= </span><span class="s9">[]</span><span class="s1">;</span>
+        <span class="s0">foreach </span><span class="s6">(</span><span class="s5">$errors </span><span class="s0">as </span><span class="s5">$error</span><span class="s6">) </span><span class="s4">{</span>
+            <span class="s5">$errorMessages</span><span class="s9">[] </span><span class="s1">= </span><span class="s5">$error</span><span class="s1">-&gt;</span><span class="s2">getMessage</span><span class="s6">()</span><span class="s1">;</span>
+        <span class="s4">}</span>
 
         <span class="s3">// Test: Fehlermeldung sollte die Maximal-Länge erwähnen</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertStringContainsString<span class="s1">(</span>
-            <span class="s6">'100'</span><span class="s1">,</span>
-            implode<span class="s1">(</span><span class="s6">''</span><span class="s1">, </span><span class="s5">$errorMessages</span><span class="s1">),</span>
-            <span class="s6">'Fehlermeldung sollte Maximal-Länge erwähnen'</span>
-        <span class="s1">);</span>
-    <span class="s1">}</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertStringContainsString</span><span class="s6">(</span>
+            <span class="s7">'100'</span><span class="s1">,</span>
+            <span class="s2">implode</span><span class="s6">(</span><span class="s7">''</span><span class="s1">, </span><span class="s5">$errorMessages</span><span class="s6">)</span><span class="s1">,</span>
+            <span class="s7">'Fehlermeldung sollte Maximal-Länge erwähnen'</span>
+        <span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Testet die Zeichenvalidierung gegen XSS-Angriffe</span>
@@ -153,28 +155,28 @@ PropertyFilterDtoTest.php</font>
      <span class="s3">* 2. Führt Validierung durch</span>
      <span class="s3">* 3. Überprüft dass Fehler auftreten</span>
      <span class="s3">*/</span>
-    <span class="s0">public function </span>testInvalidCharactersInSearch<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">public function </span><span class="s2">testInvalidCharactersInSearch</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// ===== ARRANGE Phase =====</span>
 
         <span class="s3">// DTO mit potentiell schädlichen Zeichen erstellen</span>
-        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span>PropertyFilterDto<span class="s1">();</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>search <span class="s1">= </span><span class="s6">'Test&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'</span><span class="s1">;</span>
+        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s6">()</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">search </span><span class="s1">= </span><span class="s7">'Test&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'</span><span class="s1">;</span>
 
         <span class="s3">// ===== ACT Phase =====</span>
 
         <span class="s3">// Validierung durchführen</span>
-        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span>validator<span class="s1">-&gt;</span>validate<span class="s1">(</span><span class="s5">$dto</span><span class="s1">);</span>
+        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s6">(</span><span class="s5">$dto</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ASSERT Phase =====</span>
 
         <span class="s3">// Test: Es sollten Validierungsfehler auftreten</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertGreaterThan<span class="s1">(</span>
-            <span class="s7">0</span><span class="s1">,</span>
-            count<span class="s1">(</span><span class="s5">$errors</span><span class="s1">),</span>
-            <span class="s6">'Suchbegriff mit Sonderzeichen sollte Validierungsfehler verursachen'</span>
-        <span class="s1">);</span>
-    <span class="s1">}</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertGreaterThan</span><span class="s6">(</span>
+            <span class="s8">0</span><span class="s1">,</span>
+            <span class="s2">count</span><span class="s6">(</span><span class="s5">$errors</span><span class="s6">)</span><span class="s1">,</span>
+            <span class="s7">'Suchbegriff mit Sonderzeichen sollte Validierungsfehler verursachen'</span>
+        <span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Testet die Längenvalidierung für Städtenamen</span>
@@ -187,28 +189,28 @@ PropertyFilterDtoTest.php</font>
      <span class="s3">* 2. Führt Validierung durch</span>
      <span class="s3">* 3. Überprüft dass Fehler auftreten</span>
      <span class="s3">*/</span>
-    <span class="s0">public function </span>testTownFieldTooLong<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">public function </span><span class="s2">testTownFieldTooLong</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// ===== ARRANGE Phase =====</span>
 
         <span class="s3">// DTO mit zu langem Städtenamen erstellen (101 Zeichen)</span>
-        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span>PropertyFilterDto<span class="s1">();</span>
-        <span class="s5">$dto</span><span class="s1">-&gt;</span>town <span class="s1">= </span>str_repeat<span class="s1">(</span><span class="s6">'a'</span><span class="s1">, </span><span class="s7">101</span><span class="s1">);</span>
+        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s6">()</span><span class="s1">;</span>
+        <span class="s5">$dto</span><span class="s1">-&gt;</span><span class="s2">town </span><span class="s1">= </span><span class="s2">str_repeat</span><span class="s6">(</span><span class="s7">'a'</span><span class="s1">, </span><span class="s8">101</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ACT Phase =====</span>
 
         <span class="s3">// Validierung durchführen</span>
-        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span>validator<span class="s1">-&gt;</span>validate<span class="s1">(</span><span class="s5">$dto</span><span class="s1">);</span>
+        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s6">(</span><span class="s5">$dto</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ASSERT Phase =====</span>
 
         <span class="s3">// Test: Es sollten Validierungsfehler auftreten</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertGreaterThan<span class="s1">(</span>
-            <span class="s7">0</span><span class="s1">,</span>
-            count<span class="s1">(</span><span class="s5">$errors</span><span class="s1">),</span>
-            <span class="s6">'Stadtname mit 101 Zeichen sollte Validierungsfehler verursachen'</span>
-        <span class="s1">);</span>
-    <span class="s1">}</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertGreaterThan</span><span class="s6">(</span>
+            <span class="s8">0</span><span class="s1">,</span>
+            <span class="s2">count</span><span class="s6">(</span><span class="s5">$errors</span><span class="s6">)</span><span class="s1">,</span>
+            <span class="s7">'Stadtname mit 101 Zeichen sollte Validierungsfehler verursachen'</span>
+        <span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Testet dass ein leeres DTO valide ist</span>
@@ -221,40 +223,40 @@ PropertyFilterDtoTest.php</font>
      <span class="s3">* 2. Führt Validierung durch</span>
      <span class="s3">* 3. Überprüft dass keine Fehler auftreten</span>
      <span class="s3">*/</span>
-    <span class="s0">public function </span>testEmptyDtoIsValid<span class="s1">(): </span>void
-    <span class="s1">{</span>
+    <span class="s0">public function </span><span class="s2">testEmptyDtoIsValid</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
         <span class="s3">// ===== ARRANGE Phase =====</span>
 
         <span class="s3">// Leeres DTO erstellen (alle Felder sind null)</span>
-        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span>PropertyFilterDto<span class="s1">();</span>
+        <span class="s5">$dto </span><span class="s1">= </span><span class="s0">new </span><span class="s2">PropertyFilterDto</span><span class="s6">()</span><span class="s1">;</span>
 
         <span class="s3">// ===== ACT Phase =====</span>
 
         <span class="s3">// Validierung durchführen</span>
-        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span>validator<span class="s1">-&gt;</span>validate<span class="s1">(</span><span class="s5">$dto</span><span class="s1">);</span>
+        <span class="s5">$errors </span><span class="s1">= </span><span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator</span><span class="s1">-&gt;</span><span class="s2">validate</span><span class="s6">(</span><span class="s5">$dto</span><span class="s6">)</span><span class="s1">;</span>
 
         <span class="s3">// ===== ASSERT Phase =====</span>
 
         <span class="s3">// Test: Es sollten keine Validierungsfehler auftreten</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>assertCount<span class="s1">(</span>
-            <span class="s7">0</span><span class="s1">,</span>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">assertCount</span><span class="s6">(</span>
+            <span class="s8">0</span><span class="s1">,</span>
             <span class="s5">$errors</span><span class="s1">,</span>
-            <span class="s6">'Leeres DTO sollte valide sein (alle Felder optional)'</span>
-        <span class="s1">);</span>
-    <span class="s1">}</span>
+            <span class="s7">'Leeres DTO sollte valide sein (alle Felder optional)'</span>
+        <span class="s6">)</span><span class="s1">;</span>
+    <span class="s4">}</span>
 
     <span class="s3">/**</span>
      <span class="s3">* Cleanup-Methode - Wird nach jedem Test ausgeführt</span>
      <span class="s3">*</span>
      <span class="s3">* Gibt Ressourcen frei und verhindert Memory-Leaks</span>
      <span class="s3">*/</span>
-    <span class="s0">protected function </span>tearDown<span class="s1">(): </span>void
-    <span class="s1">{</span>
-        parent<span class="s1">::</span>tearDown<span class="s1">();</span>
+    <span class="s0">protected function </span><span class="s2">tearDown</span><span class="s6">()</span><span class="s1">: </span><span class="s2">void</span>
+    <span class="s4">{</span>
+        <span class="s2">parent</span><span class="s1">::</span><span class="s2">tearDown</span><span class="s6">()</span><span class="s1">;</span>
 
         <span class="s3">// Validator-Referenz freigeben</span>
-        <span class="s5">$this</span><span class="s1">-&gt;</span>validator <span class="s1">= </span>null<span class="s1">;</span>
-    <span class="s1">}</span>
-<span class="s1">}</span></pre>
+        <span class="s5">$this</span><span class="s1">-&gt;</span><span class="s2">validator </span><span class="s1">= </span><span class="s2">null</span><span class="s1">;</span>
+    <span class="s4">}</span>
+<span class="s4">}</span></pre>
 </body>
 </html>

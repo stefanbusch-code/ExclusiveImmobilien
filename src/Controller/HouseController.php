@@ -63,15 +63,24 @@ class HouseController extends AbstractController
     {
         // CSRF Token Validation für authentifizierte Benutzer
 
-        if($this->getUser()) {
+        $hasFilterParams =
+            $request->query->has('search') ||
+            $request->query->has('town') ||
+            $request->query->has('region') ||
+            $request->query->has('country') ||
+            $request->query->has('preis') ||
+            $request->query->has('slug');
+
+        if ($this->getUser() && $hasFilterParams) {
+
             if (!$request->query->has('_token')) {
-                // Token fehlt komplett -> blockieren
                 $this->addFlash('error', 'Ungültige Anfrage (CSRF Token fehlt).');
                 return $this->redirectToRoute('app_house_all');
             }
 
             $token = $request->query->get('_token');
-            if(!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
+
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken('property_filters', $token))) {
                 $this->addFlash('error', 'Ungültige Anfrage (CSRF Token ungültig).');
                 return $this->redirectToRoute('app_house_all');
             }
